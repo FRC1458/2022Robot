@@ -20,4 +20,5 @@ public class WheelDrive {
         pidController.setOutputRange (-1, 1);
         pidController.setContinuous ();
         pidController.enable ();
+    }
 }
