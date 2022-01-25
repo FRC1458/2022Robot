@@ -50,7 +50,7 @@ public class Robot extends TimedRobot {
   private boolean button1;
   private boolean button2;
   private boolean button3;
-  private boolean leftAxis;
+  private float leftAxis;
   Camera topCam;
   Camera bottomCam;
   Camera ballCamera;
