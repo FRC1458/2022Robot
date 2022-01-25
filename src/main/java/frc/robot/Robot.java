@@ -50,6 +50,7 @@ public class Robot extends TimedRobot {
   private boolean button1;
   private boolean button2;
   private boolean button3;
+  private boolean leftAxis;
   Camera topCam;
   Camera bottomCam;
   Camera ballCamera;
@@ -96,6 +97,7 @@ public class Robot extends TimedRobot {
     button1 = leftStick.getRawButton(1);
     button2 = leftStick.getRawButton(2);
     button3 = leftStick.getRawButton(3);
+    leftAxis = leftStick.getRawAxis(1)
     switch(state) {
       case MANUAL:
         manualControl();
@@ -131,8 +133,8 @@ public void manualControl() {
   if (button1) {
     leftMotor.set(0.3);
     leftMotor2.set(0.3);
-     rightMotor.set(-0.3);
-     rightMotor2.set(-0.3);
+    rightMotor.set(-0.3);
+    rightMotor2.set(-0.3);
    }
   else if (button2) {
     leftMotor.set(-0.3);
@@ -145,6 +147,36 @@ public void manualControl() {
     leftMotor2.set(0);
     rightMotor.set(0);
     rightMotor2.set(0);
+  }
+  if (leftAxis == -1) {
+    leftMotor.set(-0.1);
+    leftMotor2.set(-0.1);
+  }
+  else if (leftAxis < -0.5) {
+    leftMotor.set(0.1);
+    leftMotor2.set(0.1);
+  }
+  else if (leftAxis > -0.5) {
+    leftMotor.set(0);
+    leftMotor.set(0);
+  }
+  else if (leftAxis == 1) {
+    rightMotor.set(0.1);
+    rightMotor2.set(0.1);
+  }
+  else if (leftAxis > 0.5) {
+    rightMotor.set(-0.1);
+    rightMotor2.set(-0.1);
+  }
+  else if (leftAxis > 0) {
+    rightMotor.set(0);
+    rightMotor2.set(0);
+  }
+  else if (leftAxis == 0) {
+    leftMotor.set(0.3);
+    leftMotor2.set(0.3);
+    rightMotor.set(-0.3);
+    rightMotor2.set(-0.3);
   }
 }
 
