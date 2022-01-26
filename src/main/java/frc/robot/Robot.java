@@ -42,6 +42,15 @@ public class Robot extends TimedRobot {
   }
 
   States state;
+  private WPI_TalonSRX leftMotor;
+  private WPI_TalonSRX leftMotor2;
+  private WPI_TalonSRX rightMotor;
+  private WPI_TalonSRX rightMotor2;
+  private Joystick leftStick;
+  private boolean button1;
+  private boolean button2;
+  private boolean button3;
+  private float leftAxis;
   Camera topCam;
   Camera bottomCam;
   Camera ballCamera;
@@ -55,6 +64,11 @@ public class Robot extends TimedRobot {
   public Robot() {
     super(0.03);
     //create variables
+    leftMotor = new WPI_TalonSRX(RobotConstants.leftMotorID);
+    leftMotor2 = new WPI_TalonSRX(RobotConstants.leftMotor2ID);
+    rightMotor = new WPI_TalonSRX(RobotConstants.rightMotorID);
+    rightMotor2 = new WPI_TalonSRX(RobotConstants.rightMotor2ID);
+    leftStick = new Joystick(0);
     topCam = new Camera();
     bottomCam = new Camera();
     Ball = new Ball();
@@ -63,6 +77,7 @@ public class Robot extends TimedRobot {
     leftBackWheel = new Movement();
     rightBackWheel = new Movement();
     rightFrontWheel = new Movement();
+    state = States.MANUAL;
   }
 
   @Override
@@ -79,6 +94,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    button1 = leftStick.getRawButton(1);
+    button2 = leftStick.getRawButton(2);
+    button3 = leftStick.getRawButton(3);
+    leftAxis = leftStick.getRawAxis(1)
     switch(state) {
       case MANUAL:
         manualControl();
@@ -110,9 +129,56 @@ public class Robot extends TimedRobot {
     }
   }
 
-  public void manualControl() {
-    
+public void manualControl() {
+  if (button1) {
+    leftMotor.set(0.3);
+    leftMotor2.set(0.3);
+    rightMotor.set(-0.3);
+    rightMotor2.set(-0.3);
+   }
+  else if (button2) {
+    leftMotor.set(-0.3);
+    leftMotor2.set(-0.3);
+    rightMotor.set(0.3);
+    rightMotor2.set(0.3);
   }
+  else if (button3) {
+    leftMotor.set(0);
+    leftMotor2.set(0);
+    rightMotor.set(0);
+    rightMotor2.set(0);
+  }
+  if (leftAxis == -1) {
+    leftMotor.set(-0.1);
+    leftMotor2.set(-0.1);
+  }
+  else if (leftAxis < -0.5) {
+    leftMotor.set(0.1);
+    leftMotor2.set(0.1);
+  }
+  else if (leftAxis > -0.5) {
+    leftMotor.set(0);
+    leftMotor.set(0);
+  }
+  else if (leftAxis == 1) {
+    rightMotor.set(0.1);
+    rightMotor2.set(0.1);
+  }
+  else if (leftAxis > 0.5) {
+    rightMotor.set(-0.1);
+    rightMotor2.set(-0.1);
+  }
+  else if (leftAxis > 0) {
+    rightMotor.set(0);
+    rightMotor2.set(0);
+  }
+  else if (leftAxis == 0) {
+    leftMotor.set(0.3);
+    leftMotor2.set(0.3);
+    rightMotor.set(-0.3);
+    rightMotor2.set(-0.3);
+  }
+}
 
   public void detectBall() {
 
