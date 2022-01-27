@@ -15,6 +15,11 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+
+import edu.wpi.first.math.controller.PIDController;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 //import edu.wpi.first.wpilibj.Ultrasonic;
 
 
@@ -51,15 +56,29 @@ public class Robot extends TimedRobot {
   private boolean button2;
   private boolean button3;
   private float leftAxis;
+  private float rightAxis;
+
+  private CANSparkMax angleMotorFR;
+  private CANSparkMax speedMotorFR;
+  private PIDController pidControllerFR;
+  private CANSparkMax angleMotorFL;
+  private CANSparkMax speedMotorFL;
+  private PIDController pidControllerFL;
+  private CANSparkMax angleMotorBR;
+  private CANSparkMax speedMotorBR;
+  private PIDController pidControllerBR;
+  private CANSparkMax angleMotorBL;
+  private CANSparkMax speedMotorBL;
+  private PIDController pidControllerBL;
+
   Camera topCam;
   Camera bottomCam;
   Camera ballCamera;
-  Ball Ball;
-  Movement swerveDrive;
-  Movement leftFrontWheel;
-  Movement leftBackWheel;
-  Movement rightFrontWheel;
-  Movement rightBackWheel;
+  SwerveDrive swerveDrive;
+  Wheel frontRightWheel;
+  Wheel frontLeftWheel;
+  Wheel backRightWheel;
+  Wheel backLeftWheel;
   
   public Robot() {
     super(0.03);
@@ -72,12 +91,28 @@ public class Robot extends TimedRobot {
     topCam = new Camera();
     bottomCam = new Camera();
     Ball = new Ball();
-    swerveDrive  = new Movement();
-    leftFrontWheel = new Movement();
-    leftBackWheel = new Movement();
-    rightBackWheel = new Movement();
-    rightFrontWheel = new Movement();
     state = States.MANUAL;
+
+    angleMotorFR = new CANSparkMax();
+    angleMotorFL = new CANSparkMax();
+    angleMotorBR = new CANSparkMax();
+    angleMotorBL = new CANSparkMax();
+
+    speedMotorFR = new CANSparkMax();
+    speedMotorFL = new CANSparkMax();
+    speedMotorBR = new CANSparkMax();
+    speedMotorBL = new CANSparkMax();
+
+    pidControllerFR = new PIDController();
+    pidControllerFL = new PIDController();
+    pidControllerBR = new PIDController();
+    pidControllerBL = new PIDController();
+
+    frontRightWheel = new Wheel(angleMotorFR, speedMotorFR, pidControllerFR);
+    frontLeftWheel = new Wheel(angleMotorFL, speedMotorFL, pidControllerFL);
+    backRightWheel = new Wheel(angleMotorBR, speedMotorBR, pidControllerBR);
+    backLeftWheel = new Wheel(angleMotorBL, speedMotorBL, pidControllerBL);
+    swerveDrive = new SwerveDrive(frontRightWheel, frontLeftWheel, backRightWheel, backLeftWheel);
   }
 
   @Override
@@ -97,7 +132,12 @@ public class Robot extends TimedRobot {
     button1 = leftStick.getRawButton(1);
     button2 = leftStick.getRawButton(2);
     button3 = leftStick.getRawButton(3);
-    leftAxis = leftStick.getRawAxis(1)
+    leftAxis = leftStick.getRawAxis(1);
+
+    xAxis = leftStick.getRawAxis(0);
+    yAxis = leftStick.getRawAxis(1);
+    rAxis = leftStick.getRawAxis(2);
+
     switch(state) {
       case MANUAL:
         manualControl();
@@ -178,6 +218,16 @@ public void manualControl() {
     rightMotor.set(-0.3);
     rightMotor2.set(-0.3);
   }
+
+  //Swerve Drive
+  /*
+  swerveDrive.drive(xAxis, yAxis, rAxis);
+
+  frontLeftWheel.drive(swerveDrive.moduleStates[0]);
+  frontRightWheel.drive(swerveDrive.moduleStates[1]);
+  backLeftWheel.drive(swerveDrive.moduleStates[2]);
+  backRightWheel.drive(swerveDrive.moduleStates[3]);
+  */
 }
 
   public void detectBall() {
