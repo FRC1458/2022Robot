@@ -3,10 +3,10 @@ package frc.robot.swervedrive;
 import edu.wpi.first.math.controller.PIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class Wheel {
-    private CANSparkMax angleMotor;
+    /*private CANSparkMax angleMotor;
     private CANSparkMax speedMotor;
     private PIDController pidController;
 
@@ -39,5 +39,5 @@ public class Wheel {
         }
 
         pidController.setSetpoint (setpoint);
-    }
+    }*/
 }

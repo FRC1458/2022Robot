@@ -1,7 +1,10 @@
 package frc.robot.swervedrive;
 
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+
 public class SwerveDrive {
-    ChassisSpeeds speeds;
+    /*ChassisSpeeds speeds;
     SwerveModuleState[] moduleStates;
     Wheel frontLeft;
     Wheel frontRight;
@@ -21,5 +24,5 @@ public class SwerveDrive {
         speeds.omegaRadiansPerSecond = r;
 
         moduleStates = kinematics.toSwerveModuleStates(speeds);
-    }
+    }*/
 }

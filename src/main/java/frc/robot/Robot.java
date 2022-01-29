@@ -20,11 +20,15 @@ import edu.wpi.first.math.controller.PIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import frc.robot.RobotConstants;
+import frc.robot.swervedrive.SwerveDrive;
+import frc.robot.swervedrive.Wheel;
+
 //import edu.wpi.first.wpilibj.Ultrasonic;
 
 
 //class Camera;
-/**
+/**sssP
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
  * documentation. If you change the name of this class or the package after
@@ -55,8 +59,8 @@ public class Robot extends TimedRobot {
   private boolean button1;
   private boolean button2;
   private boolean button3;
-  private float leftAxis;
-  private float rightAxis;
+  private double leftAxis;
+  private double rightAxis;
 
   private CANSparkMax angleMotorFR;
   private CANSparkMax speedMotorFR;
@@ -71,9 +75,9 @@ public class Robot extends TimedRobot {
   private CANSparkMax speedMotorBL;
   private PIDController pidControllerBL;
 
-  Camera topCam;
-  Camera bottomCam;
-  Camera ballCamera;
+  //Camera topCam;
+  //Camera bottomCam;
+  //Camera ballCamera;
   SwerveDrive swerveDrive;
   Wheel frontRightWheel;
   Wheel frontLeftWheel;
@@ -83,16 +87,12 @@ public class Robot extends TimedRobot {
   public Robot() {
     super(0.03);
     //create variables
-    leftMotor = new WPI_TalonSRX(RobotConstants.leftMotorID);
-    leftMotor2 = new WPI_TalonSRX(RobotConstants.leftMotor2ID);
-    rightMotor = new WPI_TalonSRX(RobotConstants.rightMotorID);
-    rightMotor2 = new WPI_TalonSRX(RobotConstants.rightMotor2ID);
     leftStick = new Joystick(0);
-    topCam = new Camera();
-    bottomCam = new Camera();
-    Ball = new Ball();
+    //topCam = new Camera();
+    //bottomCam = new Camera();
+    //Ball = new Ball();
     state = States.MANUAL;
-
+    /*
     angleMotorFR = new CANSparkMax();
     angleMotorFL = new CANSparkMax();
     angleMotorBR = new CANSparkMax();
@@ -113,6 +113,7 @@ public class Robot extends TimedRobot {
     backRightWheel = new Wheel(angleMotorBR, speedMotorBR, pidControllerBR);
     backLeftWheel = new Wheel(angleMotorBL, speedMotorBL, pidControllerBL);
     swerveDrive = new SwerveDrive(frontRightWheel, frontLeftWheel, backRightWheel, backLeftWheel);
+    */
   }
 
   @Override
@@ -134,10 +135,10 @@ public class Robot extends TimedRobot {
     button3 = leftStick.getRawButton(3);
     leftAxis = leftStick.getRawAxis(1);
 
-    xAxis = leftStick.getRawAxis(0);
-    yAxis = leftStick.getRawAxis(1);
-    rAxis = leftStick.getRawAxis(2);
-
+    double xAxis = leftStick.getRawAxis(0);
+    double yAxis = leftStick.getRawAxis(1);
+    double rAxis = leftStick.getRawAxis(2);
+    /*
     switch(state) {
       case MANUAL:
         manualControl();
@@ -146,7 +147,7 @@ public class Robot extends TimedRobot {
       case AUTONOMOUS:
         
         //autonomousPeriodic();
-        state = State.DETECT_BALL;
+        state = States.DETECT_BALL;
         break;
       case DETECT_BALL:
         detectBall();
@@ -166,58 +167,59 @@ public class Robot extends TimedRobot {
       case DROP_BALL:
         dropBall();
         break;
+    }*/
+  }
+  /*
+  public void manualControl() {
+    if (button1) {
+      leftMotor.set(0.3);
+      leftMotor2.set(0.3);
+      rightMotor.set(-0.3);
+      rightMotor2.set(-0.3);
     }
-  }
-
-public void manualControl() {
-  if (button1) {
-    leftMotor.set(0.3);
-    leftMotor2.set(0.3);
-    rightMotor.set(-0.3);
-    rightMotor2.set(-0.3);
-   }
-  else if (button2) {
-    leftMotor.set(-0.3);
-    leftMotor2.set(-0.3);
-    rightMotor.set(0.3);
-    rightMotor2.set(0.3);
-  }
-  else if (button3) {
-    leftMotor.set(0);
-    leftMotor2.set(0);
-    rightMotor.set(0);
-    rightMotor2.set(0);
-  }
-  if (leftAxis == -1) {
-    leftMotor.set(-0.1);
-    leftMotor2.set(-0.1);
-  }
-  else if (leftAxis < -0.5) {
-    leftMotor.set(0.1);
-    leftMotor2.set(0.1);
-  }
-  else if (leftAxis > -0.5) {
-    leftMotor.set(0);
-    leftMotor.set(0);
-  }
-  else if (leftAxis == 1) {
-    rightMotor.set(0.1);
-    rightMotor2.set(0.1);
-  }
-  else if (leftAxis > 0.5) {
-    rightMotor.set(-0.1);
-    rightMotor2.set(-0.1);
-  }
-  else if (leftAxis > 0) {
-    rightMotor.set(0);
-    rightMotor2.set(0);
-  }
-  else if (leftAxis == 0) {
-    leftMotor.set(0.3);
-    leftMotor2.set(0.3);
-    rightMotor.set(-0.3);
-    rightMotor2.set(-0.3);
-  }
+    else if (button2) {
+      leftMotor.set(-0.3);
+      leftMotor2.set(-0.3);
+      rightMotor.set(0.3);
+      rightMotor2.set(0.3);
+    }
+    else if (button3) {
+      leftMotor.set(0);
+      leftMotor2.set(0);
+      rightMotor.set(0);
+      rightMotor2.set(0);
+    }
+    if (leftAxis == -1) {
+      leftMotor.set(-0.1);
+      leftMotor2.set(-0.1);
+    }
+    else if (leftAxis < -0.5) {
+      leftMotor.set(0.1);
+      leftMotor2.set(0.1);
+    }
+    else if (leftAxis > -0.5) {
+      leftMotor.set(0);
+      leftMotor.set(0);
+    }
+    else if (leftAxis == 1) {
+      rightMotor.set(0.1);
+      rightMotor2.set(0.1);
+    }
+    else if (leftAxis > 0.5) {
+      rightMotor.set(-0.1);
+      rightMotor2.set(-0.1);
+    }
+    else if (leftAxis > 0) {
+      rightMotor.set(0);
+      rightMotor2.set(0);
+    }
+    else if (leftAxis == 0) {
+      leftMotor.set(0.3);
+      leftMotor2.set(0.3);
+      rightMotor.set(-0.3);
+      rightMotor2.set(-0.3);
+    }
+  }*/
 
   //Swerve Drive
   /*
@@ -228,49 +230,48 @@ public void manualControl() {
   backLeftWheel.drive(swerveDrive.moduleStates[2]);
   backRightWheel.drive(swerveDrive.moduleStates[3]);
   */
-}
-
+  /*
   public void detectBall() {
 
     if (findBall()) {
-      state = State.MOVE_TO_BALL;
+      state = States.MOVE_TO_BALL;
     }
     else {
-      state = State.GO_TO_HUMAN;
+      state = States.GO_TO_HUMAN;
     }
   }
   public void goToHuman() {
-
-
-    }
+    
+    
   }
+
   public void moveToBall() {
     if (reachedBall()) {
-      state = State.PICK_UP_BALL;
+      state = States.PICK_UP_BALL;
     }
     else {
-      state = State.DETECT_BALL;
+      state = States.DETECT_BALL;
     }
   }
 
   public void pickUpBall() {
     if (ballPickedUp()) {
-      state = State.GO_TO_HUB;
+      state = States.GO_TO_HUB;
     }
     else {
-      state = State.DETECT_BALL;
+      state = States.DETECT_BALL;
     }
   }
 
   public void goToHub() {
     if (reachedHub()) {
-      state = State.DROP_BALL;
+      state = States.DROP_BALL;
     }
   }
 
   public void dropBall() {
     if (ballDropped()) {
-      state = State.DETECT_BALL;
+      state = States.DETECT_BALL;
     }
   }
   int count = 0;
@@ -287,7 +288,7 @@ public void manualControl() {
       swerveDrive.turn_left(0.1);
     }
     if (count > 1000) {
-      state = State.GO_TO_HUMAN;
+      state = States.GO_TO_HUMAN;
     }
     return false;
   }
@@ -319,6 +320,7 @@ public void manualControl() {
     }
     return false;
   }
+  */
   
   @Override
   public void autonomousInit() {
