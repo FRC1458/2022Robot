@@ -79,10 +79,6 @@ public class Robot extends TimedRobot {
   //Camera bottomCam;
   //Camera ballCamera;
   SwerveDrive swerveDrive;
-  Wheel frontRightWheel;
-  Wheel frontLeftWheel;
-  Wheel backRightWheel;
-  Wheel backLeftWheel;
   
   public Robot() {
     super(0.03);
@@ -111,9 +107,9 @@ public class Robot extends TimedRobot {
     frontRightWheel = new Wheel(angleMotorFR, speedMotorFR, pidControllerFR);
     frontLeftWheel = new Wheel(angleMotorFL, speedMotorFL, pidControllerFL);
     backRightWheel = new Wheel(angleMotorBR, speedMotorBR, pidControllerBR);
-    backLeftWheel = new Wheel(angleMotorBL, speedMotorBL, pidControllerBL);
-    swerveDrive = new SwerveDrive(frontRightWheel, frontLeftWheel, backRightWheel, backLeftWheel);
-    */
+    backLeftWheel = new Wheel(angleMotorBL, speedMotorBL, pidControllerBL);*/
+    swerveDrive = new SwerveDrive();
+    
   }
 
   @Override
@@ -138,6 +134,8 @@ public class Robot extends TimedRobot {
     double xAxis = leftStick.getRawAxis(0);
     double yAxis = leftStick.getRawAxis(1);
     double rAxis = leftStick.getRawAxis(2);
+
+    swerveDrive.drive(xAxis, yAxis, rAxis);
     /*
     switch(state) {
       case MANUAL:
@@ -224,13 +222,7 @@ public class Robot extends TimedRobot {
   //Swerve Drive
   /*
   swerveDrive.drive(xAxis, yAxis, rAxis);
-
-  frontLeftWheel.drive(swerveDrive.moduleStates[0]);
-  frontRightWheel.drive(swerveDrive.moduleStates[1]);
-  backLeftWheel.drive(swerveDrive.moduleStates[2]);
-  backRightWheel.drive(swerveDrive.moduleStates[3]);
-  */
-  /*
+  
   public void detectBall() {
 
     if (findBall()) {
