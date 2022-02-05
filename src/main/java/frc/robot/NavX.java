@@ -32,17 +32,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class NavX{
   AHRS ahrs;
+  private boolean error;
 
   public NavX() {
+      error = true;
       try {
           /* Communicate w/navX-MXP via the MXP SPI Bus.                                     */
           /* Alternatively:  I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB     */
           /* See http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/ for details. */
-          ahrs = new AHRS(SPI.Port.kMXP); 
+          ahrs = new AHRS(SPI.Port.kMXP);
+          error = false;
       } catch (RuntimeException ex ) {
           DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
+          return;
       } catch (Exception a) {
             DriverStation.reportError("navX not found or returning error:  " + a.getMessage(), true);
+            return;
       }
   }
 
@@ -57,7 +62,7 @@ public class NavX{
    * Display navX-MXP Sensor Data on Smart Dashboard
    */
   public void operatorControl(boolean running) {
-      while (running) {
+      while (running && !error) {
           
           Timer.delay(0.020);		/* wait for one motor update time period (50Hz)     */
 

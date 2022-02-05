@@ -15,22 +15,26 @@ public class Wheel {
     private SparkMaxPIDController pidController;
     private RelativeEncoder encoder;
     //private ControlType controltype;
+    private boolean error;
 
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
 
     public Wheel (int angleMotorID, int speedMotorID) {
+        error = false;
         try {
             this.angleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
         } catch (Exception a) {
-            DriverStation.reportError("angle motor failed to initialize:  " + a.getMessage(), true);
+            DriverStation.reportError("angle motor "+angleMotorID+" failed to initialize:  " + a.getMessage(), true);
+            error = true;
         }
 
         try {
             this.speedMotor = new CANSparkMax(speedMotorID, MotorType.kBrushless);
         } catch (Exception a) {
-            DriverStation.reportError("speed motor failed to initialize:  " + a.getMessage(), true);
+            DriverStation.reportError("speed motor "+speedMotorID+" failed to initialize:  " + a.getMessage(), true);
+            error = true;
         }
-        
+
         /* 
         angleMotor.restoreFactoryDefaults();
 
@@ -82,6 +86,7 @@ public class Wheel {
     }
 
     public void drive (SwerveModuleState state) {
+        if (error) return;
         /*
         double p = SmartDashboard.getNumber("P Gain", 0);
         double i = SmartDashboard.getNumber("I Gain", 0);
