@@ -133,7 +133,7 @@ public class Robot extends TimedRobot {
 
     double xAxis = leftStick.getRawAxis(0);
     double yAxis = leftStick.getRawAxis(1);
-    double rAxis = leftStick.getRawAxis(2);
+    double rAxis = leftStick.getTwist();
 
     swerveDrive.drive(xAxis, yAxis, rAxis);
     /*

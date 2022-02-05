@@ -3,24 +3,24 @@ package frc.robot.swervedrive;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.ControlType;
+//import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Wheel {
-    private CANSparkMax angleMotor;
+    //private CANSparkMax angleMotor;
     private CANSparkMax speedMotor;
     private SparkMaxPIDController pidController;
     private RelativeEncoder encoder;
-    private ControlType controltype;
+    //private ControlType controltype;
 
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
 
     public Wheel (int angleMotorID, int speedMotorID) {
-        this.angleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
+        //this.angleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
         this.speedMotor = new CANSparkMax(speedMotorID, MotorType.kBrushless);
-
+        /* 
         angleMotor.restoreFactoryDefaults();
 
         pidController = angleMotor.getPIDController();
@@ -67,9 +67,11 @@ public class Wheel {
 
         // button to toggle between velocity and smart motion modes
         SmartDashboard.putBoolean("Mode", true);
+        */
     }
 
     public void drive (SwerveModuleState state) {
+        /*
         double p = SmartDashboard.getNumber("P Gain", 0);
         double i = SmartDashboard.getNumber("I Gain", 0);
         double d = SmartDashboard.getNumber("D Gain", 0);
@@ -110,6 +112,7 @@ public class Wheel {
          * setReference method on an existing pid object and setting
          * the control type to kSmartMotion
          */
+        /*
         pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
         processVariable = encoder.getPosition();
         }
@@ -117,6 +120,7 @@ public class Wheel {
         SmartDashboard.putNumber("SetPoint", setPoint);
         SmartDashboard.putNumber("Process Variable", processVariable);
         SmartDashboard.putNumber("Output", angleMotor.getAppliedOutput());
+        */
 
         speedMotor.set(state.speedMetersPerSecond);
     }

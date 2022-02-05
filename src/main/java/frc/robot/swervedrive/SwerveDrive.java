@@ -15,8 +15,8 @@ public class SwerveDrive {
     SwerveDriveKinematics kinematics;
 
     public SwerveDrive() {
-        frontRight = new Wheel(RobotConstants.frontRightAngleID, RobotConstants.frontRightSpeedID);
-        //frontLeft = new Wheel(RobotConstants.frontLeftAngleID, RobotConstants.frontLeftSpeedID);
+        //frontRight = new Wheel(RobotConstants.frontRightAngleID, RobotConstants.frontRightSpeedID);
+        frontLeft = new Wheel(RobotConstants.frontLeftAngleID, RobotConstants.frontLeftSpeedID);
         //backRight = new Wheel(RobotConstants.backRightAngleID, RobotConstants.backRightSpeedID);
         //backLeft = new Wheel(RobotConstants.backLeftAngleID, RobotConstants.backLeftSpeedID);
 
@@ -28,6 +28,8 @@ public class SwerveDrive {
 
         // Creating my kinematics object using the module locations
         kinematics = new SwerveDriveKinematics(frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
+
+        speeds = new ChassisSpeeds();
     }
 
     public void drive(double x, double y, double r) {
