@@ -15,9 +15,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import edu.wpi.first.math.controller.PIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -83,11 +81,6 @@ public class Robot extends TimedRobot {
   //Camera ballCamera;
   SwerveDrive swerveDrive;
 
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
-
   public Robot() {
     super(0.03);
     //create variables
@@ -122,12 +115,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     //set to defaults
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
-    NavX navx = new NavX();
-    navx.operatorControl(true);
+    System.out.println("Hello");
+    //NavX navx = new NavX();
+    //navx.operatorControl(true);
+    System.out.println("Hello2");
     autonomousInit();
+    System.out.println("Hello3");
   }
 
   @Override
@@ -144,7 +137,7 @@ public class Robot extends TimedRobot {
 
     double xAxis = leftStick.getRawAxis(0);
     double yAxis = leftStick.getRawAxis(1);
-    double rAxis = leftStick.getTwist();
+    double rAxis = leftStick.getRawAxis(3);
 
     swerveDrive.drive(xAxis, yAxis, rAxis);
     /*
@@ -327,21 +320,9 @@ public class Robot extends TimedRobot {
   
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
   }
 
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
   }
 }

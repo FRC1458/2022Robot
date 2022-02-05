@@ -7,9 +7,11 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
+import frc.robot.RobotConstants;
 
 public class Wheel {
-    //private CANSparkMax angleMotor;
+    private CANSparkMax angleMotor;
     private CANSparkMax speedMotor;
     private SparkMaxPIDController pidController;
     private RelativeEncoder encoder;
@@ -18,17 +20,17 @@ public class Wheel {
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
 
     public Wheel (int angleMotorID, int speedMotorID) {
-        //this.angleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
+        this.angleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
         this.speedMotor = new CANSparkMax(speedMotorID, MotorType.kBrushless);
-        /* 
+        
         angleMotor.restoreFactoryDefaults();
 
         pidController = angleMotor.getPIDController();
         encoder = angleMotor.getEncoder();
 
-        kP = 5e-5; 
-        kI = 1e-6;
-        kD = 0; 
+        kP = RobotConstants.kP; 
+        kI = RobotConstants.kI;
+        kD = RobotConstants.kD; 
         kIz = 0; 
         kFF = 0.000156; 
         kMaxOutput = 1; 
@@ -64,14 +66,10 @@ public class Wheel {
         SmartDashboard.putNumber("Allowed Closed Loop Error", allowedErr);
         SmartDashboard.putNumber("Set Position", 0);
         SmartDashboard.putNumber("Set Velocity", 0);
-
-        // button to toggle between velocity and smart motion modes
-        SmartDashboard.putBoolean("Mode", true);
-        */
     }
 
     public void drive (SwerveModuleState state) {
-        /*
+        
         double p = SmartDashboard.getNumber("P Gain", 0);
         double i = SmartDashboard.getNumber("I Gain", 0);
         double d = SmartDashboard.getNumber("D Gain", 0);
@@ -94,34 +92,52 @@ public class Wheel {
           pidController.setOutputRange(min, max); 
           kMinOutput = min; kMaxOutput = max; 
         }
-        if((maxV != maxVel)) { pidController.setSmartMotionMaxVelocity(maxV,0); maxVel = maxV; }
-        if((minV != minVel)) { pidController.setSmartMotionMinOutputVelocity(minV,0); minVel = minV; }
-        if((maxA != maxAcc)) { pidController.setSmartMotionMaxAccel(maxA,0); maxAcc = maxA; }
-        if((allE != allowedErr)) { pidController.setSmartMotionAllowedClosedLoopError(allE,0); allowedErr = allE; }
-
-        double setPoint, processVariable;
-        boolean mode = SmartDashboard.getBoolean("Mode", false);
-        if(mode) {
-        setPoint = SmartDashboard.getNumber("Set Velocity", 0);
-        pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
-        processVariable = encoder.getVelocity();
-        } else {
-        setPoint = SmartDashboard.getNumber("Set Position", 0);
-        /**
-         * As with other PID modes, Smart Motion is set by calling the
-         * setReference method on an existing pid object and setting
-         * the control type to kSmartMotion
-         */
-        /*
-        pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
-        processVariable = encoder.getPosition();
+        if((maxV != maxVel)) 
+        { 
+            pidController.setSmartMotionMaxVelocity(maxV,0); maxVel = maxV; 
         }
+        if((minV != minVel)) 
+        { 
+            pidController.setSmartMotionMinOutputVelocity(minV,0); minVel = minV; 
+        }
+        if((maxA != maxAcc)) 
+        { 
+            pidController.setSmartMotionMaxAccel(maxA,0); maxAcc = maxA; 
+        }
+        if((allE != allowedErr)) 
+        { 
+            pidController.setSmartMotionAllowedClosedLoopError(allE,0); allowedErr = allE; 
+        }
+        /*
+        double setPoint;
+        setPoint = SmartDashboard.getNumber("Set Position", 0);
+        pidController.setReference(setPoint, CANSparkMax.ControlType.kPosition);
         
         SmartDashboard.putNumber("SetPoint", setPoint);
+        */
+        double processVariable = encoder.getPosition();
         SmartDashboard.putNumber("Process Variable", processVariable);
         SmartDashboard.putNumber("Output", angleMotor.getAppliedOutput());
-        */
+        
+        double radians = state.angle.getRadians();
 
+        double rotations = radians * RobotConstants.swerveDriveGearRatio / (2 * Math.PI);
+        
+        if (rotations > 0 && Math.abs(rotations - processVariable) > Math.abs(rotations - RobotConstants.swerveDriveGearRatio - processVariable)) {
+            rotations = rotations - RobotConstants.swerveDriveGearRatio;
+            SmartDashboard.putNumber("Funny Number", 1);
+        }
+        else if (rotations < 0 && Math.abs(rotations - processVariable) > Math.abs(rotations + RobotConstants.swerveDriveGearRatio - processVariable)) {
+            rotations = rotations + RobotConstants.swerveDriveGearRatio;
+            SmartDashboard.putNumber("Funny Number", -1);
+        }
+        else {
+            SmartDashboard.putNumber("Funny Number", 0);
+        }
+
+        SmartDashboard.putNumber("Rotations", rotations);
+
+        pidController.setReference(rotations, CANSparkMax.ControlType.kPosition);
         speedMotor.set(state.speedMetersPerSecond);
     }
 }

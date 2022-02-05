@@ -1,6 +1,7 @@
 package frc.robot.swervedrive;
 
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import frc.robot.RobotConstants;
@@ -37,7 +38,14 @@ public class SwerveDrive {
         speeds.vyMetersPerSecond = y;
         speeds.omegaRadiansPerSecond = r;
 
+        SmartDashboard.putNumber("X", x);
+        SmartDashboard.putNumber("Y", y);
+        SmartDashboard.putNumber("Rotation", r);
+
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speeds);
+
+        SmartDashboard.putNumber("SpeedMotor", moduleStates[0].speedMetersPerSecond);
+        SmartDashboard.putNumber("AngleMotor", moduleStates[0].angle.getDegrees());
 
         frontLeft.drive(moduleStates[0]);
         //frontRight.drive(moduleStates[1]);
