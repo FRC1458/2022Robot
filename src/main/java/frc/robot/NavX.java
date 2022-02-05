@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * connectivity issues after initial installation of the navX-MXP sensor.
  *
  */
-public class navvy{
+public class NavX{
   AHRS ahrs;
   Joystick stick;
 

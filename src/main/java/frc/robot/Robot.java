@@ -23,6 +23,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.RobotConstants;
 import frc.robot.swervedrive.SwerveDrive;
 import frc.robot.swervedrive.Wheel;
+import frc.robot.NavX;
 
 //import edu.wpi.first.wpilibj.Ultrasonic;
 
@@ -79,7 +80,12 @@ public class Robot extends TimedRobot {
   //Camera bottomCam;
   //Camera ballCamera;
   SwerveDrive swerveDrive;
-  
+
+  private static final String kDefaultAuto = "Default";
+  private static final String kCustomAuto = "My Auto";
+  private String m_autoSelected;
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
   public Robot() {
     super(0.03);
     //create variables
@@ -109,14 +115,17 @@ public class Robot extends TimedRobot {
     backRightWheel = new Wheel(angleMotorBR, speedMotorBR, pidControllerBR);
     backLeftWheel = new Wheel(angleMotorBL, speedMotorBL, pidControllerBL);*/
     swerveDrive = new SwerveDrive();
-    
   }
 
   @Override
   public void robotInit() {
     //set to defaults
+    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
+    m_chooser.addOption("My Auto", kCustomAuto);
+    SmartDashboard.putData("Auto choices", m_chooser);
+    navvy navx = new navvy();
+    navx.operatorControl(true);
     autonomousInit();
-
   }
 
   @Override
@@ -316,11 +325,21 @@ public class Robot extends TimedRobot {
   
   @Override
   public void autonomousInit() {
-
+    m_autoSelected = m_chooser.getSelected();
+    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
+    System.out.println("Auto selected: " + m_autoSelected);
   }
 
   @Override
   public void autonomousPeriodic() {
-    
+    switch (m_autoSelected) {
+      case kCustomAuto:
+        // Put custom auto code here
+        break;
+      case kDefaultAuto:
+      default:
+        // Put default auto code here
+        break;
+    }
   }
 }
