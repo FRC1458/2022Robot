@@ -32,10 +32,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class NavX{
   AHRS ahrs;
-  Joystick stick;
 
-  public navvy() {
-      stick = new Joystick(0);
+  public NavX() {
       try {
           /* Communicate w/navX-MXP via the MXP SPI Bus.                                     */
           /* Alternatively:  I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB     */
@@ -43,6 +41,8 @@ public class NavX{
           ahrs = new AHRS(SPI.Port.kMXP); 
       } catch (RuntimeException ex ) {
           DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
+      } catch (Exception a) {
+            DriverStation.reportError("navX not found or returning error:  " + a.getMessage(), true);
       }
   }
 
@@ -60,11 +60,6 @@ public class NavX{
       while (running) {
           
           Timer.delay(0.020);		/* wait for one motor update time period (50Hz)     */
-          
-          boolean zero_yaw_pressed = stick.getTrigger();
-          if ( zero_yaw_pressed ) {
-              ahrs.zeroYaw();
-          }
 
           /* Display 6-axis Processed Angle Data                                      */
           SmartDashboard.putBoolean(  "IMU_Connected",        ahrs.isConnected());

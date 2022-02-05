@@ -6,10 +6,11 @@ import com.revrobotics.SparkMaxPIDController;
 //import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Wheel {
-    //private CANSparkMax angleMotor;
+    private CANSparkMax angleMotor;
     private CANSparkMax speedMotor;
     private SparkMaxPIDController pidController;
     private RelativeEncoder encoder;
@@ -18,8 +19,18 @@ public class Wheel {
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
 
     public Wheel (int angleMotorID, int speedMotorID) {
-        //this.angleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
-        this.speedMotor = new CANSparkMax(speedMotorID, MotorType.kBrushless);
+        try {
+            this.angleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
+        } catch (Exception a) {
+            DriverStation.reportError("angle motor failed to initialize:  " + a.getMessage(), true);
+        }
+
+        try {
+            this.speedMotor = new CANSparkMax(speedMotorID, MotorType.kBrushless);
+        } catch (Exception a) {
+            DriverStation.reportError("speed motor failed to initialize:  " + a.getMessage(), true);
+        }
+        
         /* 
         angleMotor.restoreFactoryDefaults();
 
