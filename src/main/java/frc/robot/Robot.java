@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -79,11 +79,7 @@ public class Robot extends TimedRobot {
   //Camera bottomCam;
   //Camera ballCamera;
   SwerveDrive swerveDrive;
-  Wheel frontRightWheel;
-  Wheel frontLeftWheel;
-  Wheel backRightWheel;
-  Wheel backLeftWheel;
-  
+
   public Robot() {
     super(0.03);
     //create variables
@@ -111,16 +107,19 @@ public class Robot extends TimedRobot {
     frontRightWheel = new Wheel(angleMotorFR, speedMotorFR, pidControllerFR);
     frontLeftWheel = new Wheel(angleMotorFL, speedMotorFL, pidControllerFL);
     backRightWheel = new Wheel(angleMotorBR, speedMotorBR, pidControllerBR);
-    backLeftWheel = new Wheel(angleMotorBL, speedMotorBL, pidControllerBL);
-    swerveDrive = new SwerveDrive(frontRightWheel, frontLeftWheel, backRightWheel, backLeftWheel);
-    */
+    backLeftWheel = new Wheel(angleMotorBL, speedMotorBL, pidControllerBL);*/
+    swerveDrive = new SwerveDrive();
   }
 
   @Override
   public void robotInit() {
     //set to defaults
+    System.out.println("Hello");
+    //NavX navx = new NavX();
+    //navx.operatorControl(true);
+    System.out.println("Hello2");
     autonomousInit();
-
+    System.out.println("Hello3");
   }
 
   @Override
@@ -137,7 +136,9 @@ public class Robot extends TimedRobot {
 
     double xAxis = leftStick.getRawAxis(0);
     double yAxis = leftStick.getRawAxis(1);
-    double rAxis = leftStick.getRawAxis(2);
+    double rAxis = leftStick.getRawAxis(3);
+
+    swerveDrive.drive(xAxis, yAxis, rAxis);
     /*
     switch(state) {
       case MANUAL:
@@ -224,13 +225,7 @@ public class Robot extends TimedRobot {
   //Swerve Drive
   /*
   swerveDrive.drive(xAxis, yAxis, rAxis);
-
-  frontLeftWheel.drive(swerveDrive.moduleStates[0]);
-  frontRightWheel.drive(swerveDrive.moduleStates[1]);
-  backLeftWheel.drive(swerveDrive.moduleStates[2]);
-  backRightWheel.drive(swerveDrive.moduleStates[3]);
-  */
-  /*
+  
   public void detectBall() {
 
     if (findBall()) {
@@ -324,11 +319,9 @@ public class Robot extends TimedRobot {
   
   @Override
   public void autonomousInit() {
-
   }
 
   @Override
   public void autonomousPeriodic() {
-    
   }
 }
