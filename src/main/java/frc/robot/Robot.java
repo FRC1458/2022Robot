@@ -75,6 +75,8 @@ public class Robot extends TimedRobot {
   private CANSparkMax speedMotorBL;
   private PIDController pidControllerBL;
 
+  private NavX navx;
+
   //Camera topCam;
   //Camera bottomCam;
   //Camera ballCamera;
@@ -109,17 +111,14 @@ public class Robot extends TimedRobot {
     backRightWheel = new Wheel(angleMotorBR, speedMotorBR, pidControllerBR);
     backLeftWheel = new Wheel(angleMotorBL, speedMotorBL, pidControllerBL);*/
     swerveDrive = new SwerveDrive();
+
+    navx = new NavX();
   }
 
   @Override
   public void robotInit() {
     //set to defaults
-    System.out.println("Hello");
-    //NavX navx = new NavX();
-    //navx.operatorControl(true);
-    System.out.println("Hello2");
     autonomousInit();
-    System.out.println("Hello3");
   }
 
   @Override
@@ -139,6 +138,8 @@ public class Robot extends TimedRobot {
     double rAxis = leftStick.getRawAxis(3);
 
     swerveDrive.drive(xAxis, yAxis, rAxis);
+    
+    navx.operatorControl();
     /*
     switch(state) {
       case MANUAL:
