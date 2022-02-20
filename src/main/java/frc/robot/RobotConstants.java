@@ -1,15 +1,15 @@
 package frc.robot;
 
 public class RobotConstants {
-    public final static int frontLeftAngleID = 4;
-    public final static int frontRightAngleID = 1;
-    public final static int backLeftAngleID = 2;
-    public final static int backRightAngleID = 100;
+    public final static int frontLeftAngleID = 13;
+    public final static int frontRightAngleID = 15;
+    public final static int backLeftAngleID = 17;
+    public final static int backRightAngleID = 19;
     
-    public final static int frontLeftSpeedID = 13;
+    public final static int frontLeftSpeedID = 3;
     public final static int frontRightSpeedID = 5;
-    public final static int backLeftSpeedID = 6;
-    public final static int backRightSpeedID = 7;
+    public final static int backLeftSpeedID = 7;
+    public final static int backRightSpeedID = 9;
 
     public final static double alphaX = 1;
     public final static double betaY = 1;

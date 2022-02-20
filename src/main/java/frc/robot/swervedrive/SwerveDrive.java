@@ -21,10 +21,10 @@ public class SwerveDrive {
     Pose2d pose;
 
     public SwerveDrive() {
-        //frontRight = new Wheel(RobotConstants.frontRightAngleID, RobotConstants.frontRightSpeedID);
-        frontLeft = new Wheel(RobotConstants.frontLeftAngleID, RobotConstants.frontLeftSpeedID);
-        //backRight = new Wheel(RobotConstants.backRightAngleID, RobotConstants.backRightSpeedID);
-        //backLeft = new Wheel(RobotConstants.backLeftAngleID, RobotConstants.backLeftSpeedID);
+        //frontLeft = new Wheel(RobotConstants.frontLeftAngleID, RobotConstants.frontLeftSpeedID, "Front Left (1)");
+        frontRight = new Wheel(RobotConstants.frontRightAngleID, RobotConstants.frontRightSpeedID, "Front Right (2)");
+        //backLeft = new Wheel(RobotConstants.backLeftAngleID, RobotConstants.backLeftSpeedID, "Back Left (3)");
+        backRight = new Wheel(RobotConstants.backRightAngleID, RobotConstants.backRightSpeedID, "Back Right (4)");
 
         // Locations for the swerve drive modules relative to the robot center.
         Translation2d frontLeftLocation = new Translation2d(RobotConstants.frontLeftXMeters, RobotConstants.frontLeftYMeters);
@@ -46,24 +46,31 @@ public class SwerveDrive {
 
         SmartDashboard.putNumber("X", x);
         SmartDashboard.putNumber("Y", y);
-        SmartDashboard.putNumber("Rotation", r);
+        SmartDashboard.putNumber("R", r);
 
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speeds);
 
-        SmartDashboard.putNumber("SpeedMotor", moduleStates[0].speedMetersPerSecond);
-        SmartDashboard.putNumber("AngleMotor", moduleStates[0].angle.getDegrees());
+        SmartDashboard.putNumber("SpeedMotor", moduleStates[1].speedMetersPerSecond);
+        SmartDashboard.putNumber("AngleMotor", moduleStates[1].angle.getDegrees());
 
         //Set to angle that we get from the NavX
-        double angle = 0;
+        //double angle = 0;
 
-        Rotation2d gyroAngle = Rotation2d.fromDegrees(angle);
+        //Rotation2d gyroAngle = Rotation2d.fromDegrees(angle);
 
         // Update the pose
-        pose = odometry.update(gyroAngle, moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3]);
+        //pose = odometry.update(gyroAngle, moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3]);
 
-        frontLeft.drive(moduleStates[0]);
-        //frontRight.drive(moduleStates[1]);
+        //frontLeft.drive(moduleStates[0]);
+        frontRight.drive(moduleStates[1]);
         //backLeft.drive(moduleStates[2]);
-        //backRight.drive(moduleStates[3]);
+        backRight.drive(moduleStates[1]);
+    }
+
+    public void zeroEncoders() {
+        //frontLeft.zeroEncoders();
+        frontRight.zeroEncoders();
+        //backLeft.zeroEncoders();
+        backRight.zeroEncoders();
     }
 }

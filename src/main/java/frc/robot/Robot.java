@@ -23,6 +23,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.RobotConstants;
 import frc.robot.swervedrive.SwerveDrive;
 import frc.robot.swervedrive.Wheel;
+import frc.robot.JoystickWrapper;
 
 //import edu.wpi.first.wpilibj.Ultrasonic;
 
@@ -55,25 +56,12 @@ public class Robot extends TimedRobot {
   private WPI_TalonSRX leftMotor2;
   private WPI_TalonSRX rightMotor;
   private WPI_TalonSRX rightMotor2;
-  private Joystick leftStick;
+  private JoystickWrapper leftStick;
   private boolean button1;
   private boolean button2;
   private boolean button3;
   private double leftAxis;
   private double rightAxis;
-
-  private CANSparkMax angleMotorFR;
-  private CANSparkMax speedMotorFR;
-  private PIDController pidControllerFR;
-  private CANSparkMax angleMotorFL;
-  private CANSparkMax speedMotorFL;
-  private PIDController pidControllerFL;
-  private CANSparkMax angleMotorBR;
-  private CANSparkMax speedMotorBR;
-  private PIDController pidControllerBR;
-  private CANSparkMax angleMotorBL;
-  private CANSparkMax speedMotorBL;
-  private PIDController pidControllerBL;
 
   private NavX navx;
 
@@ -85,31 +73,11 @@ public class Robot extends TimedRobot {
   public Robot() {
     super(0.03);
     //create variables
-    leftStick = new Joystick(0);
+    leftStick = new JoystickWrapper(0);
     //topCam = new Camera();
     //bottomCam = new Camera();
     //Ball = new Ball();
     state = States.MANUAL;
-    /*
-    angleMotorFR = new CANSparkMax();
-    angleMotorFL = new CANSparkMax();
-    angleMotorBR = new CANSparkMax();
-    angleMotorBL = new CANSparkMax();
-
-    speedMotorFR = new CANSparkMax();
-    speedMotorFL = new CANSparkMax();
-    speedMotorBR = new CANSparkMax();
-    speedMotorBL = new CANSparkMax();
-
-    pidControllerFR = new PIDController();
-    pidControllerFL = new PIDController();
-    pidControllerBR = new PIDController();
-    pidControllerBL = new PIDController();
-
-    frontRightWheel = new Wheel(angleMotorFR, speedMotorFR, pidControllerFR);
-    frontLeftWheel = new Wheel(angleMotorFL, speedMotorFL, pidControllerFL);
-    backRightWheel = new Wheel(angleMotorBR, speedMotorBR, pidControllerBR);
-    backLeftWheel = new Wheel(angleMotorBL, speedMotorBL, pidControllerBL);*/
     swerveDrive = new SwerveDrive();
 
     navx = new NavX();
@@ -123,7 +91,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    //set defaults for teleop
   }
 
   @Override
@@ -222,11 +189,7 @@ public class Robot extends TimedRobot {
       rightMotor2.set(-0.3);
     }
   }*/
-
-  //Swerve Drive
   /*
-  swerveDrive.drive(xAxis, yAxis, rAxis);
-  
   public void detectBall() {
 
     if (findBall()) {
