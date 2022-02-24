@@ -1,14 +1,16 @@
+import edu.wpi.first.wpilibj.DriverStation;
+
 public class NavXWrapper {
     private NavX navx;
     public NavXWrapper(){
         try{
             navx = new NavX();
         }
-        catch{
+        catch (RuntimeException ex ) {
             DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
         }
     }
-    public operatorControl(){
+    public void operatorControl() {
         navx.operatorControl();
     }
 }

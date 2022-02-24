@@ -1,11 +1,19 @@
 package frc.robot.swervedrive;
 
+import edu.wpi.first.wpilibj.DriverStation;
+
 public class SwerveDriveWrapper {
    
     public SwerveDrive swervedrive;
 
     public SwerveDriveWrapper () {
-        swervedrive = new SwerveDrive() ;
+        try{
+            swervedrive = new SwerveDrive() ;
+            
+        }
+        catch (RuntimeException ex ){
+            DriverStation.reportError("Error instantiating swervedrive:  " + ex.getMessage(), true);
+        }
 
     }
 
@@ -16,4 +24,5 @@ public class SwerveDriveWrapper {
     public void zeroEncoders() {
         swervedrive.zeroEncoders();
     }
+
 }
