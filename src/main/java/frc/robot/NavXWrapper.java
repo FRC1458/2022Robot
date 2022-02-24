@@ -1,3 +1,5 @@
+package frc.robot;
+
 import edu.wpi.first.wpilibj.DriverStation;
 
 public class NavXWrapper {
@@ -14,3 +16,4 @@ public class NavXWrapper {
         navx.operatorControl();
     }
 }
+
