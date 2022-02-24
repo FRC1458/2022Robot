@@ -6,15 +6,16 @@ public class JoystickWrapper {
     
     Joystick js;
     double deadZone;
+    int port;
 
-    public JoystickWrapper(int ID) {
-        js = new Joystick(ID);
-        
+    public JoystickWrapper(int port) {
+        this.port = port;
+        js = new Joystick(this.port);
         deadZone = 0.1;
     }
 
     public double getRawAxis(int ID) {
-        if (Math.abs(js.getRawAxis(ID)) < 0.05) {
+        if (Math.abs(js.getRawAxis(ID)) < deadZone) {
             return 0.0;
         }
         return js.getRawAxis(ID);

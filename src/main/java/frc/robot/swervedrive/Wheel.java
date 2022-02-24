@@ -1,5 +1,6 @@
 package frc.robot.swervedrive;
 
+import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -10,12 +11,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotConstants;
 
+
 public class Wheel {
     private CANSparkMax angleMotor;
     private CANSparkMax speedMotor;
     private SparkMaxPIDController pidController;
     private RelativeEncoder encoder;
+    
     //private ControlType controltype;
+
 
     private double speed;
     private double goalAngle;
@@ -28,13 +32,13 @@ public class Wheel {
         this.angleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
         this.speedMotor = new CANSparkMax(speedMotorID, MotorType.kBrushless);
 
+
         this.wheelName = wheelName;
         
-        angleMotor.restoreFactoryDefaults();
+        //angleMotor.restoreFactoryDefaults();
 
         pidController = angleMotor.getPIDController();
         encoder = angleMotor.getEncoder();
-
         SmartDashboard.putNumber("Rotations", 0);
 
         kP = RobotConstants.kP; 
@@ -83,7 +87,7 @@ public class Wheel {
     public void drive (SwerveModuleState state) {
 
         speed = state.speedMetersPerSecond;
-        goalAngle = state.angle.getDegrees() + 180;
+        goalAngle = state.angle.getDegrees();
         
         double p = SmartDashboard.getNumber("P Gain", 0);
         double i = SmartDashboard.getNumber("I Gain", 0);
@@ -137,68 +141,36 @@ public class Wheel {
         */
         double processVariable = encoder.getPosition();
         SmartDashboard.putNumber("Encoder" + wheelName, processVariable);
-        SmartDashboard.putNumber("Output" + wheelName, angleMotor.getAppliedOutput());
+        // SmartDashboard.putNumber("Output" + wheelName, angleMotor.getAppliedOutput());
 
-        SmartDashboard.putNumber("Angle Motor Current (Amps)" + wheelName, angleMotor.getOutputCurrent());
-        SmartDashboard.putNumber("Speed Motor Current (Amps)", speedMotor.getOutputCurrent());
-        /*
-        double fullRotations = Math.signum(processVariable) * Math.floor((Math.abs(processVariable) + RobotConstants.swerveDriveGearRatio / 4) / RobotConstants.swerveDriveGearRatio);
-
-        double radians = goalAngle;
-
-        double rotations = radians * RobotConstants.swerveDriveGearRatio / (2 * Math.PI);
-        rotations += fullRotations * RobotConstants.swerveDriveGearRatio;
+        // SmartDashboard.putNumber("Angle Motor Current (Amps)" + wheelName, angleMotor.getOutputCurrent());
+        // SmartDashboard.putNumber("Speed Motor Current (Amps)", speedMotor.getOutputCurrent());
 
         
-        if (rotations > 0 && Math.abs(rotations - processVariable) > Math.abs(rotations - RobotConstants.swerveDriveGearRatio - processVariable)) {
-            rotations = rotations - RobotConstants.swerveDriveGearRatio;
-            SmartDashboard.putNumber("Funny Number" + wheelName, 1);
-        }
-        else if (rotations < 0 && Math.abs(rotations - processVariable) > Math.abs(rotations + RobotConstants.swerveDriveGearRatio - processVariable)) {
-            rotations = rotations + RobotConstants.swerveDriveGearRatio;
-            SmartDashboard.putNumber("Funny Number" + wheelName, -1);
-        }
-        else {
-            SmartDashboard.putNumber("Funny Number" + wheelName, 0);
-        }
-        */
-        
-        double currentAngle = (processVariable * (360 / RobotConstants.swerveDriveGearRatio)) % 360;
+        double currentAngle = (processVariable * (360 / RobotConstants.swerveDriveGearRatio));
 
-        double rotation1 = currentAngle - goalAngle;
-        double rotation2 = 0;
 
-        if (rotation1 < 0) {
-            rotation2 = rotation1 + 360;
-        }
-        else {
-            rotation2 = rotation1 - 360;
-        }
-        
-        double rotation = 0;
+        double diff = (currentAngle - goalAngle) % 360;
 
-        if (Math.abs(rotation1) > Math.abs(rotation2)) {
-            rotation = rotation2;
-        }
-        else {
-            rotation = rotation1;
+        if (Math.abs(diff) > 180) {
+          diff = diff - 360*Math.signum(diff); // add or subtract 360 so the difference is always smaller than 180
         }
 
-        double realGoalAngle = processVariable + rotation * (RobotConstants.swerveDriveGearRatio / 360);
+        double realGoalRotations = (currentAngle - diff) * RobotConstants.swerveDriveGearRatio/360;
 
         SmartDashboard.putNumber("Current Angle", currentAngle);
 
         SmartDashboard.putNumber("Goal Angle", goalAngle);
 
-        SmartDashboard.putNumber("Real Goal Angle", realGoalAngle);
+        SmartDashboard.putNumber("Real Goal Angle", realGoalRotations);
 
-        SmartDashboard.putNumber("Rotation", rotation);
+        SmartDashboard.putNumber("difference", diff);
 
         SmartDashboard.putNumber("SPEED" + wheelName, speed);
 
-        //rotations = SmartDashboard.getNumber("Rotations", 0);
+        // rotations = SmartDashboard.getNumber("Rotations", 0);
 
-        pidController.setReference(realGoalAngle, CANSparkMax.ControlType.kPosition);
+        pidController.setReference(realGoalRotations, CANSparkMax.ControlType.kPosition);
         speedMotor.set(speed);
     }
 
