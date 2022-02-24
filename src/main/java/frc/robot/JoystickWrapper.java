@@ -9,6 +9,7 @@ public class JoystickWrapper {
 
     public JoystickWrapper(int ID) {
         js = new Joystick(ID);
+        
         deadZone = 0.1;
     }
 
