@@ -21,8 +21,8 @@ public class SwerveDriveWrapper {
         swervedrive.drive(x, y, r);
     }
 
-    public void zeroEncoders() {
-        swervedrive.zeroEncoders();
+    public void setEncoders() {
+        swervedrive.setEncoders();
     }
 
 }

@@ -10,6 +10,11 @@ public class RobotConstants {
     public final static int frontRightSpeedID = 5;
     public final static int backLeftSpeedID = 7;
     public final static int backRightSpeedID = 9;
+    
+    public final static int frontLeftAbsoluteEncoderID = 0;
+    public final static int frontRightAbsoluteEncoderID = 0;
+    public final static int backLeftAbsoluteEncoderID = 0;
+    public final static int backRightAbsoluteEncoderID = 31;
 
     public final static double alphaX = 1;
     public final static double betaY = 1;

@@ -21,10 +21,10 @@ public class SwerveDrive {
     Pose2d pose;
 
     public SwerveDrive() {
-        //frontLeft = new Wheel(RobotConstants.frontLeftAngleID, RobotConstants.frontLeftSpeedID, "Front Left (1)");
-        frontRight = new Wheel(RobotConstants.frontRightAngleID, RobotConstants.frontRightSpeedID, "Front Right (2)");
-        //backLeft = new Wheel(RobotConstants.backLeftAngleID, RobotConstants.backLeftSpeedID, "Back Left (3)");
-        //backRight = new Wheel(RobotConstants.backRightAngleID, RobotConstants.backRightSpeedID, "Back Right (4)");
+        //frontLeft = new Wheel(RobotConstants.frontLeftAngleID, RobotConstants.frontLeftSpeedID, RobotConstants.frontLeftAbsoluteEncoderID, "Front Left (1)");
+        //frontRight = new Wheel(RobotConstants.frontRightAngleID, RobotConstants.frontRightSpeedID, RobotConstants.frontRightAbsoluteEncoderID, "Front Right (2)");
+        //backLeft = new Wheel(RobotConstants.backLeftAngleID, RobotConstants.backLeftSpeedID, RobotConstants.backLeftAbsoluteEncoderID, "Back Left (3)");
+        backRight = new Wheel(RobotConstants.backRightAngleID, RobotConstants.backRightSpeedID, RobotConstants.backRightAbsoluteEncoderID, "Back Right (4)");
 
         // Locations for the swerve drive modules relative to the robot center.
         Translation2d frontLeftLocation = new Translation2d(RobotConstants.frontLeftXMeters, RobotConstants.frontLeftYMeters);
@@ -62,15 +62,15 @@ public class SwerveDrive {
         //pose = odometry.update(gyroAngle, moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3]);
 
         //frontLeft.drive(moduleStates[0]);
-        frontRight.drive(moduleStates[1]);
+        //frontRight.drive(moduleStates[1]);
         //backLeft.drive(moduleStates[2]);
-        //backRight.drive(moduleStates[1]);
+        backRight.drive(moduleStates[1]);
     }
 
-    public void zeroEncoders() {
+    public void setEncoders() {
         //frontLeft.zeroEncoders();
-        frontRight.zeroEncoders();
+        //frontRight.zeroEncoders();
         //backLeft.zeroEncoders();
-        //backRight.zeroEncoders();
+        backRight.setEncoders();
     }
 }

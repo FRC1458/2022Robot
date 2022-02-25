@@ -1,5 +1,7 @@
 package frc.robot.swervedrive;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -10,6 +12,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotConstants;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 
 public class Wheel {
@@ -17,6 +20,7 @@ public class Wheel {
     private CANSparkMax speedMotor;
     private SparkMaxPIDController pidController;
     private RelativeEncoder encoder;
+    private TalonSRX absoluteEncoder;
     
     //private ControlType controltype;
 
@@ -28,10 +32,12 @@ public class Wheel {
 
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
 
-    public Wheel (int angleMotorID, int speedMotorID, String wheelName) {
+    public Wheel (int angleMotorID, int speedMotorID, int absoluteEncoderID, String wheelName) {
         this.angleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
         this.speedMotor = new CANSparkMax(speedMotorID, MotorType.kBrushless);
+        this.absoluteEncoder = new TalonSRX(absoluteEncoderID);
 
+        this.absoluteEncoder.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 
         this.wheelName = wheelName;
         
@@ -174,7 +180,8 @@ public class Wheel {
         speedMotor.set(speed);
     }
 
-    public void zeroEncoders() {
-        encoder.setPosition(0);
+    public void setEncoders() {
+        encoder.setPosition((absoluteEncoder.getSelectedSensorPosition(0) % 4096)*360.0/4096.0);
+        this.drive(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
     }
 }

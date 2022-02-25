@@ -7,10 +7,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 public class WheelWrapper {
     public Wheel wheel;
     
-    public WheelWrapper (int angleMotorID, int speedMotorID, String wheelName) {
-        wheel = new Wheel(angleMotorID, speedMotorID, wheelName);
+    public WheelWrapper (int angleMotorID, int speedMotorID, int absoluteEncoderID, String wheelName) {
         try{
-            wheel = new Wheel(angleMotorID, speedMotorID, wheelName);
+            wheel = new Wheel(angleMotorID, speedMotorID, absoluteEncoderID, wheelName);
         }
         catch (RuntimeException ex ) {
             DriverStation.reportError("Error Initiating Wheel:  " + ex.getMessage(), true);
@@ -22,7 +21,7 @@ public class WheelWrapper {
     }
     
     public void zeroEncoders() {
-        wheel.zeroEncoders();
+        wheel.setEncoders();
     }
 
 }
