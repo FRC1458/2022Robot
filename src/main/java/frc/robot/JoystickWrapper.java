@@ -2,7 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 
-public class JoystickWrapper {
+public class JoystickWrapper extends Wrapper{
     
     Joystick js;
     double deadZone;

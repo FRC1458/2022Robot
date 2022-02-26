@@ -2,7 +2,9 @@ package frc.robot.swervedrive;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
-public class SwerveDriveWrapper {
+import frc.robot.*;
+
+public class SwerveDriveWrapper extends Wrapper{
    
     public SwerveDrive swervedrive;
 

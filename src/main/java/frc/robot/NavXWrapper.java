@@ -2,8 +2,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
-public class NavXWrapper {
+public class NavXWrapper extends Wrapper{
     private NavX navx;
+
     public NavXWrapper(){
         try{
             navx = new NavX();

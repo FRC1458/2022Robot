@@ -2,7 +2,7 @@ package frc.robot;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 
-public class CANSparkMaxWrapper {
+public class CANSparkMaxWrapper extends Wrapper{
     public CANSparkMax spark;
 
     public CANSparkMaxWrapper (int num) {

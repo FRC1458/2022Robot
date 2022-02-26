@@ -24,6 +24,7 @@ import frc.robot.RobotConstants;
 import frc.robot.swervedrive.SwerveDrive;
 import frc.robot.swervedrive.Wheel;
 import frc.robot.JoystickWrapper;
+import frc.robot.NavXWrapper;
 
 //import edu.wpi.first.wpilibj.Ultrasonic;
 
@@ -63,7 +64,7 @@ public class Robot extends TimedRobot {
   private double leftAxis;
   private double rightAxis;
 
-  private NavX navx;
+  private NavXWrapper navx;
 
   //Camera topCam;
   //Camera bottomCam;
@@ -80,7 +81,7 @@ public class Robot extends TimedRobot {
     state = States.MANUAL;
     swerveDrive = new SwerveDrive();
 
-    navx = new NavX();
+    navx = new NavXWrapper();
   }
 
   @Override

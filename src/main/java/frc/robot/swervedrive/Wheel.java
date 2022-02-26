@@ -14,8 +14,10 @@ import frc.robot.Robot;
 import frc.robot.RobotConstants;
 import edu.wpi.first.math.geometry.Rotation2d;
 
+import frc.robot.Wrapper;
 
-public class Wheel {
+
+public class Wheel{
     private CANSparkMax angleMotor;
     private CANSparkMax speedMotor;
     private SparkMaxPIDController pidController;

@@ -1,10 +1,11 @@
 package frc.robot.swervedrive;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.Wrapper;
 
 //Help me I'm trapped in a WheelWrapper factory.
 
-public class WheelWrapper {
+public class WheelWrapper extends Wrapper{
     public Wheel wheel;
     
     public WheelWrapper (int angleMotorID, int speedMotorID, int absoluteEncoderID, String wheelName) {
