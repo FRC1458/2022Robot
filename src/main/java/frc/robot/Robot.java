@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -25,6 +26,7 @@ import frc.robot.swervedrive.SwerveDrive;
 import frc.robot.swervedrive.Wheel;
 import frc.robot.JoystickWrapper;
 import frc.robot.NavXWrapper;
+import edu.wpi.first.wpilibj.SPI;
 
 //import edu.wpi.first.wpilibj.Ultrasonic;
 
@@ -64,12 +66,16 @@ public class Robot extends TimedRobot {
   private double leftAxis;
   private double rightAxis;
 
-  private NavXWrapper navx;
+  //private NavXWrapper navx;
+
+  //private AHRS ahrs;
 
   //Camera topCam;
   //Camera bottomCam;
   //Camera ballCamera;
   SwerveDrive swerveDrive;
+
+  int seriousNumber = 0;
 
   public Robot() {
     super(0.03);
@@ -81,7 +87,9 @@ public class Robot extends TimedRobot {
     state = States.MANUAL;
     swerveDrive = new SwerveDrive();
 
-    navx = new NavXWrapper();
+    //navx = new NavXWrapper();
+
+    //ahrs = new AHRS(SPI.Port.kOnboardCS0);
   }
 
   @Override
@@ -96,6 +104,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    //SmartDashboard.putNumber("Robot Angle", ahrs.getYaw());
+    SmartDashboard.putNumber("Serious Number", seriousNumber);
+    seriousNumber++;
+    
     button1 = leftStick.getRawButton(1);
     button2 = leftStick.getRawButton(2);
     button3 = leftStick.getRawButton(3);
@@ -107,7 +119,7 @@ public class Robot extends TimedRobot {
 
     swerveDrive.drive(xAxis, yAxis, rAxis);
     
-    navx.operatorControl();
+    //navx.operatorControl();
     /*
     switch(state) {
       case MANUAL:

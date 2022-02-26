@@ -9,6 +9,8 @@ import frc.robot.RobotConstants;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.SPI;
+import com.kauailabs.navx.frc.AHRS;
 
 public class SwerveDrive {
     ChassisSpeeds speeds;
@@ -19,6 +21,7 @@ public class SwerveDrive {
     SwerveDriveKinematics kinematics;
     SwerveDriveOdometry odometry;
     Pose2d pose;
+    AHRS ahrs;
 
     public SwerveDrive() {
         //frontLeft = new Wheel(RobotConstants.frontLeftAngleID, RobotConstants.frontLeftSpeedID, RobotConstants.frontLeftAbsoluteEncoderID, "Front Left (1)");
@@ -37,16 +40,21 @@ public class SwerveDrive {
         odometry = new SwerveDriveOdometry(kinematics, new Rotation2d(), new Pose2d(5.0, 13.5, new Rotation2d()));
 
         speeds = new ChassisSpeeds();
+
+        ahrs = new AHRS(SPI.Port.kMXP);
     }
 
     public void drive(double x, double y, double r) {
-        speeds.vxMetersPerSecond = x;
-        speeds.vyMetersPerSecond = y;
-        speeds.omegaRadiansPerSecond = r;
+        // speeds.vxMetersPerSecond = x;
+        // speeds.vyMetersPerSecond = y;
+        // speeds.omegaRadiansPerSecond = r;
+
+        speeds = ChassisSpeeds.fromFieldRelativeSpeeds(x, y, r, Rotation2d.fromDegrees(ahrs.getYaw()));
 
         SmartDashboard.putNumber("X", x);
         SmartDashboard.putNumber("Y", y);
         SmartDashboard.putNumber("R", r);
+        SmartDashboard.putNumber("Robot Angle", ahrs.getYaw());
 
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speeds);
 
