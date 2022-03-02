@@ -32,9 +32,9 @@ public class SwerveDrive {
 
         // Locations for the swerve drive modules relative to the robot center.
         Translation2d frontLeftLocation = new Translation2d(RobotConstants.frontLeftXMeters, RobotConstants.frontLeftYMeters);
-        Translation2d frontRightLocation = new Translation2d(RobotConstants.frontRightXMeters, RobotConstants.frontLeftYMeters);
+        Translation2d frontRightLocation = new Translation2d(RobotConstants.frontRightXMeters, RobotConstants.frontRightYMeters);
         Translation2d backLeftLocation = new Translation2d(RobotConstants.backLeftXMeters, RobotConstants.backLeftYMeters);
-        Translation2d backRightLocation = new Translation2d(RobotConstants.backRightXMeters, RobotConstants.backLeftYMeters);
+        Translation2d backRightLocation = new Translation2d(RobotConstants.backRightXMeters, RobotConstants.backRightYMeters);
 
         // Creating my kinematics object using the module locations
         kinematics = new SwerveDriveKinematics(frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
@@ -51,12 +51,12 @@ public class SwerveDrive {
 
         speedsBack.vxMetersPerSecond = x;
         speedsBack.vyMetersPerSecond = y;
-        speedsBack.omegaRadiansPerSecond = r;
+        speedsBack.omegaRadiansPerSecond = -r;
 
         SmartDashboard.putNumber("X", x);
         SmartDashboard.putNumber("Y", y);
         SmartDashboard.putNumber("R", r);
-        SmartDashboard.putNumber("Robot Angle", ahrs.getYaw());
+        // SmartDashboard.putNumber("Robot Angle", ahrs.getYaw());
 
         SwerveModuleState[] moduleStatesFront = kinematics.toSwerveModuleStates(speedsFront);
         SwerveModuleState[] moduleStatesBack = kinematics.toSwerveModuleStates(speedsBack);
@@ -76,9 +76,9 @@ public class SwerveDrive {
         //pose = odometry.update(gyroAngle, moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3]);
 
         frontLeft.drive(moduleStatesFront[2].speedMetersPerSecond, moduleStatesFront[2].angle.getDegrees());
-        frontRight.drive(moduleStatesFront[1].speedMetersPerSecond, moduleStatesFront[1].angle.getDegrees());
-        backLeft.drive(moduleStatesBack[0].speedMetersPerSecond, moduleStatesBack[0].angle.getDegrees());
-        backRight.drive(moduleStatesBack[3].speedMetersPerSecond, moduleStatesBack[3].angle.getDegrees());
+        frontRight.drive(moduleStatesFront[0].speedMetersPerSecond, moduleStatesFront[0].angle.getDegrees());
+        backLeft.drive(moduleStatesFront[3].speedMetersPerSecond, moduleStatesFront[3].angle.getDegrees());
+        backRight.drive(moduleStatesFront[1].speedMetersPerSecond, moduleStatesFront[1].angle.getDegrees());
     }
 
     public void setEncoders2() {
