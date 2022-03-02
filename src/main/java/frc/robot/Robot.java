@@ -94,12 +94,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    swerveDrive.setEncoders();
     //set to defaults
     autonomousInit();
   }
 
   @Override
   public void teleopInit() {
+    SmartDashboard.putNumber("front left offset", 0);
+    SmartDashboard.putNumber("front right offset", 0);
+    SmartDashboard.putNumber("back left offset", 0);
+    SmartDashboard.putNumber("back right offset", 0);
   }
 
   @Override
@@ -117,7 +122,7 @@ public class Robot extends TimedRobot {
     double yAxis = leftStick.getRawAxis(1);
     double rAxis = leftStick.getRawAxis(3);
 
-    swerveDrive.drive(xAxis, yAxis, rAxis);
+    swerveDrive.drive(-xAxis, yAxis, rAxis);
     
     //navx.operatorControl();
     /*

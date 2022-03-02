@@ -18,11 +18,11 @@ public class WheelWrapper extends Wrapper{
     }
 
     public void drive(SwerveModuleState state) {
-        wheel.drive(state);
+        wheel.drive(state.speedMetersPerSecond, state.angle.getDegrees());
     }
     
-    public void zeroEncoders() {
-        wheel.setEncoders();
+    public void setEncoders(double offset) {
+        wheel.setEncoders(offset);
     }
 
 }

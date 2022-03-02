@@ -92,10 +92,11 @@ public class Wheel{
         */
     }
 
-    public void drive (SwerveModuleState state) {
+    public void drive (double speed, double angle) {
 
-        speed = state.speedMetersPerSecond;
-        goalAngle = state.angle.getDegrees();
+        this.speed = speed;
+        
+        goalAngle = angle;
         
         double p = SmartDashboard.getNumber("P Gain", 0);
         double i = SmartDashboard.getNumber("I Gain", 0);
@@ -182,8 +183,13 @@ public class Wheel{
         speedMotor.set(speed);
     }
 
-    public void setEncoders() {
-        encoder.setPosition((absoluteEncoder.getSelectedSensorPosition(0) % 4096)*360.0/4096.0);
-        this.drive(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
+    public void setEncoders(double offset) {
+        encoder.setPosition(offset + (absoluteEncoder.getSelectedSensorPosition(0) % 4096)*RobotConstants.swerveDriveGearRatio/4096.0);
+        SwerveModuleState state = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
+        this.drive(state.speedMetersPerSecond, state.angle.getDegrees());
+    }
+
+    public double getAbsoluteEncoderValue() {
+        return ((absoluteEncoder.getSelectedSensorPosition(0) % 4096)*RobotConstants.swerveDriveGearRatio/4096.0);
     }
 }
