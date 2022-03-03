@@ -13,8 +13,7 @@ import edu.wpi.first.wpilibj.SPI;
 import com.kauailabs.navx.frc.AHRS;
 
 public class SwerveDrive {
-    ChassisSpeeds speedsFront;
-    ChassisSpeeds speedsBack;
+    ChassisSpeeds speeds;
     Wheel frontLeft;
     Wheel frontRight;
     Wheel backLeft;
@@ -40,32 +39,31 @@ public class SwerveDrive {
         kinematics = new SwerveDriveKinematics(frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
         odometry = new SwerveDriveOdometry(kinematics, new Rotation2d(), new Pose2d(5.0, 13.5, new Rotation2d()));
 
-        speedsFront = new ChassisSpeeds();
-        speedsBack = new ChassisSpeeds();
+        speeds = new ChassisSpeeds();
+
+        ahrs = new AHRS(SPI.Port.kMXP);
     }
 
     public void drive(double x, double y, double r) {
-        speedsFront.vxMetersPerSecond = x;
-        speedsFront.vyMetersPerSecond = y;
-        speedsFront.omegaRadiansPerSecond = r;
+        speeds.vxMetersPerSecond = x;
+        speeds.vyMetersPerSecond = y;
+        speeds.omegaRadiansPerSecond = r;
 
-        speedsBack.vxMetersPerSecond = x;
-        speedsBack.vyMetersPerSecond = y;
-        speedsBack.omegaRadiansPerSecond = -r;
+        speeds = ChassisSpeeds.fromFieldRelativeSpeeds(x, y, r, Rotation2d.fromDegrees(-ahrs.getYaw()));
+        SmartDashboard.putNumber("angle from navx", ahrs.getYaw());
 
         SmartDashboard.putNumber("X", x);
         SmartDashboard.putNumber("Y", y);
         SmartDashboard.putNumber("R", r);
-        // SmartDashboard.putNumber("Robot Angle", ahrs.getYaw());
+        SmartDashboard.putNumber("Robot Angle", ahrs.getYaw());
 
-        SwerveModuleState[] moduleStatesFront = kinematics.toSwerveModuleStates(speedsFront);
-        SwerveModuleState[] moduleStatesBack = kinematics.toSwerveModuleStates(speedsBack);
+        SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
 
-        SmartDashboard.putNumber("SpeedMotorFront", moduleStatesFront[1].speedMetersPerSecond);
-        SmartDashboard.putNumber("AngleMotorFront", moduleStatesFront[1].angle.getDegrees());
+        SmartDashboard.putNumber("SpeedMotorFront", states[1].speedMetersPerSecond);
+        SmartDashboard.putNumber("AngleMotorFront", states[1].angle.getDegrees());
 
-        SmartDashboard.putNumber("SpeedMotorBack", moduleStatesFront[1].speedMetersPerSecond);
-        SmartDashboard.putNumber("AngleMotorBack", moduleStatesFront[1].angle.getDegrees());
+        SmartDashboard.putNumber("SpeedMotorBack", states[1].speedMetersPerSecond);
+        SmartDashboard.putNumber("AngleMotorBack", states[1].angle.getDegrees());
 
         //Set to angle that we get from the NavX
         //double angle = 0;
@@ -75,10 +73,10 @@ public class SwerveDrive {
         // Update the pose
         //pose = odometry.update(gyroAngle, moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3]);
 
-        frontLeft.drive(moduleStatesFront[2].speedMetersPerSecond, moduleStatesFront[2].angle.getDegrees());
-        frontRight.drive(moduleStatesFront[0].speedMetersPerSecond, moduleStatesFront[0].angle.getDegrees());
-        backLeft.drive(moduleStatesFront[3].speedMetersPerSecond, moduleStatesFront[3].angle.getDegrees());
-        backRight.drive(moduleStatesFront[1].speedMetersPerSecond, moduleStatesFront[1].angle.getDegrees());
+        frontLeft.drive(states[2].speedMetersPerSecond, states[2].angle.getDegrees());
+        frontRight.drive(states[0].speedMetersPerSecond, states[0].angle.getDegrees());
+        backLeft.drive(states[3].speedMetersPerSecond, states[3].angle.getDegrees());
+        backRight.drive(states[1].speedMetersPerSecond, states[1].angle.getDegrees());
     }
 
     public void setEncoders2() {

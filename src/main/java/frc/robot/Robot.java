@@ -60,6 +60,7 @@ public class Robot extends TimedRobot {
   private WPI_TalonSRX rightMotor;
   private WPI_TalonSRX rightMotor2;
   private JoystickWrapper leftStick;
+  private JoystickWrapper rightStick;
   private boolean button1;
   private boolean button2;
   private boolean button3;
@@ -81,6 +82,7 @@ public class Robot extends TimedRobot {
     super(0.03);
     //create variables
     leftStick = new JoystickWrapper(0);
+    rightStick = new JoystickWrapper(1);
     //topCam = new Camera();
     //bottomCam = new Camera();
     //Ball = new Ball();
@@ -120,7 +122,7 @@ public class Robot extends TimedRobot {
 
     double xAxis = leftStick.getRawAxis(0);
     double yAxis = leftStick.getRawAxis(1);
-    double rAxis = leftStick.getRawAxis(3);
+    double rAxis = rightStick.getRawAxis(0);
 
     swerveDrive.drive(-xAxis, yAxis, rAxis);
     

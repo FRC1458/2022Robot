@@ -179,7 +179,9 @@ public class Wheel{
 
         // rotations = SmartDashboard.getNumber("Rotations", 0);
 
-        pidController.setReference(realGoalRotations, CANSparkMax.ControlType.kPosition);
+        if (speed != 0){
+            pidController.setReference(realGoalRotations, CANSparkMax.ControlType.kPosition);
+        }
         speedMotor.set(speed);
     }
 
