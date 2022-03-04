@@ -65,8 +65,8 @@ public class Robot extends TimedRobot {
   private WPI_TalonSRX leftMotor2;
   private WPI_TalonSRX rightMotor;
   private WPI_TalonSRX rightMotor2;
-  private JoystickWrapper leftStick;
-  private XboxController xboxController;
+  //private JoystickWrapper leftStick;
+  private XboxControllerWrapper xboxController;
   private boolean button1;
   private boolean button2;
   private boolean button3;
@@ -90,14 +90,15 @@ public class Robot extends TimedRobot {
   public Robot() {
     super(0.03);
     //create variables
-    leftStick = new JoystickWrapper(0);
+    //leftStick = new JoystickWrapper(0);
+    xboxController = new XboxControllerWrapper(0);
     //topCam = new Camera();
     //bottomCam = new Camera();
     //Ball = new Ball();
     state = States.MANUAL;
     swerveDrive = new SwerveDrive();
 
-    navx = new NavX();
+    //navx = new NavX();
 
     //shark = new Lasershark(0);
   }
@@ -115,10 +116,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    button1 = leftStick.getRawButton(1);
-    button2 = leftStick.getRawButton(2);
-    button3 = leftStick.getRawButton(3);
-    leftAxis = leftStick.getRawAxis(1);
+    // button1 = leftStick.getRawButton(1);
+    // button2 = leftStick.getRawButton(2);
+    // button3 = leftStick.getRawButton(3);
 
     double xAxis;
     double yAxis;
@@ -135,22 +135,21 @@ public class Robot extends TimedRobot {
       yAxis = xboxController.getLeftY();
       rAxis = xboxController.getRightX();
     }
-    else if (controllerType == 1) {
-      xAxis = leftStick.getRawAxis(0);
-      yAxis = leftStick.getRawAxis(1);
-      rAxis = leftStick.getRawAxis(3);
-    }
+    // else if (controllerType == 1) {
+    //   xAxis = leftStick.getRawAxis(0);
+    //   yAxis = leftStick.getRawAxis(1);
+    //   rAxis = leftStick.getRawAxis(3);
+    // }
     else {
       xAxis = 0;
       yAxis = 0;
       rAxis = 0;
     }
-    swerveDrive.drive(xAxis, yAxis, rAxis);
-
+    
     //double distanceToBall = shark.getDistanceCentimeters();
     //SmartDashboard.putNumber("distanceToBall", distanceToBall);
 
-    navx.operatorControl();
+    //navx.operatorControl();
 
     /*
     double pov = leftStick.getPOV();
