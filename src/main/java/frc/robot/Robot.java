@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.math.controller.PIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -78,6 +79,8 @@ public class Robot extends TimedRobot {
 
   int seriousNumber = 0;
 
+  boolean turnTo = false;
+
   public Robot() {
     super(0.03);
     //create variables
@@ -124,7 +127,21 @@ public class Robot extends TimedRobot {
     double yAxis = leftStick.getRawAxis(1);
     double rAxis = rightStick.getRawAxis(0);
 
+    /*
+    double pov = leftStick.getPOV();
+    
+    turnTo = (pov != -1) && (rAxis == 0);
+
+    if (turnTo) {
+      rAxis = swerveDrive.turnToAngle(pov);
+      if (rAxis == 0) {
+        turnTo = false;
+      }
+    }
+    */
+
     swerveDrive.drive(-xAxis, yAxis, rAxis);
+
     
     //navx.operatorControl();
     /*

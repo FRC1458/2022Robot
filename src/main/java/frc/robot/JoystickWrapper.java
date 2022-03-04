@@ -24,4 +24,8 @@ public class JoystickWrapper extends Wrapper{
     public boolean getRawButton(int ID) {
         return js.getRawButton(ID);
     }
+
+    public double getPOV() {
+        return js.getPOV();
+    }
 }

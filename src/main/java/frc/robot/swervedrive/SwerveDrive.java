@@ -79,6 +79,30 @@ public class SwerveDrive {
         backRight.drive(states[1].speedMetersPerSecond, states[1].angle.getDegrees());
     }
 
+    public double turnToAngle(double goalAngle) {
+        double error = 1;
+        double currentAngle = ahrs.getYaw();
+
+        double diff = (currentAngle - goalAngle) % 360;
+
+        if (Math.abs(diff) > 180) {
+          diff = diff - 360*Math.signum(diff); // add or subtract 360 so the difference is always smaller than 180
+        }
+
+        double realGoalAngle = (currentAngle - diff);
+
+        if (Math.abs(currentAngle - realGoalAngle) > error) {
+            if (currentAngle > realGoalAngle) {
+                return -.5;
+            }
+            else {
+                return .5;
+            }
+        }
+        return 0;
+
+    }
+
     public void setEncoders2() {
         frontLeft.setEncoders(SmartDashboard.getNumber("front left offset", 0));
         frontRight.setEncoders(SmartDashboard.getNumber("front right offset", 0));
