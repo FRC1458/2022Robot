@@ -10,7 +10,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -19,6 +18,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.util.sendable.Sendable;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -27,7 +28,11 @@ import frc.robot.swervedrive.SwerveDrive;
 import frc.robot.swervedrive.Wheel;
 import frc.robot.JoystickWrapper;
 import frc.robot.NavXWrapper;
-import edu.wpi.first.wpilibj.SPI;
+
+//import com.cuforge.libcu.Lasershark;
+
+//Xbox support
+import edu.wpi.first.wpilibj.XboxController;
 
 //import edu.wpi.first.wpilibj.Ultrasonic;
 
@@ -61,23 +66,24 @@ public class Robot extends TimedRobot {
   private WPI_TalonSRX rightMotor;
   private WPI_TalonSRX rightMotor2;
   private JoystickWrapper leftStick;
-  private JoystickWrapper rightStick;
+  private XboxController xboxController;
   private boolean button1;
   private boolean button2;
   private boolean button3;
   private double leftAxis;
   private double rightAxis;
 
-  //private NavXWrapper navx;
-
-  //private AHRS ahrs;
+  private NavX navx;
 
   //Camera topCam;
   //Camera bottomCam;
   //Camera ballCamera;
   SwerveDrive swerveDrive;
 
-  int seriousNumber = 0;
+  //Lasershark shark;
+
+  //Set Controller Type
+  int controllerType;
 
   boolean turnTo = false;
 
@@ -85,47 +91,66 @@ public class Robot extends TimedRobot {
     super(0.03);
     //create variables
     leftStick = new JoystickWrapper(0);
-    rightStick = new JoystickWrapper(1);
     //topCam = new Camera();
     //bottomCam = new Camera();
     //Ball = new Ball();
     state = States.MANUAL;
     swerveDrive = new SwerveDrive();
 
-    //navx = new NavXWrapper();
+    navx = new NavX();
 
-    //ahrs = new AHRS(SPI.Port.kOnboardCS0);
+    //shark = new Lasershark(0);
   }
+
 
   @Override
   public void robotInit() {
-    swerveDrive.setEncoders();
     //set to defaults
     autonomousInit();
   }
 
   @Override
   public void teleopInit() {
-    SmartDashboard.putNumber("front left offset", 0);
-    SmartDashboard.putNumber("front right offset", 0);
-    SmartDashboard.putNumber("back left offset", 0);
-    SmartDashboard.putNumber("back right offset", 0);
   }
 
   @Override
   public void teleopPeriodic() {
-    //SmartDashboard.putNumber("Robot Angle", ahrs.getYaw());
-    SmartDashboard.putNumber("Serious Number", seriousNumber);
-    seriousNumber++;
-    
     button1 = leftStick.getRawButton(1);
     button2 = leftStick.getRawButton(2);
     button3 = leftStick.getRawButton(3);
     leftAxis = leftStick.getRawAxis(1);
 
-    double xAxis = leftStick.getRawAxis(0);
-    double yAxis = leftStick.getRawAxis(1);
-    double rAxis = rightStick.getRawAxis(0);
+    double xAxis;
+    double yAxis;
+    double rAxis;
+
+    //SET CONTROLLER TYPE HERE
+    //SET TO 0 FOR XBOX CONTROLLER
+    //SET TO 1 FOR EVERYTHING ELSE
+    controllerType = 0;
+
+    //Controllers
+    if (controllerType == 0) {
+      xAxis = xboxController.getLeftX();
+      yAxis = xboxController.getLeftY();
+      rAxis = xboxController.getRightX();
+    }
+    else if (controllerType == 1) {
+      xAxis = leftStick.getRawAxis(0);
+      yAxis = leftStick.getRawAxis(1);
+      rAxis = leftStick.getRawAxis(3);
+    }
+    else {
+      xAxis = 0;
+      yAxis = 0;
+      rAxis = 0;
+    }
+    swerveDrive.drive(xAxis, yAxis, rAxis);
+
+    //double distanceToBall = shark.getDistanceCentimeters();
+    //SmartDashboard.putNumber("distanceToBall", distanceToBall);
+
+    navx.operatorControl();
 
     /*
     double pov = leftStick.getPOV();
@@ -143,7 +168,7 @@ public class Robot extends TimedRobot {
     swerveDrive.drive(-xAxis, yAxis, rAxis);
 
     
-    //navx.operatorControl();
+
     /*
     switch(state) {
       case MANUAL:
