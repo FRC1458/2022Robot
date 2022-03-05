@@ -72,10 +72,10 @@ public class Robot extends TimedRobot {
 
   
   States state;
-  private WPI_TalonSRX leftMotor;
-  private WPI_TalonSRX leftMotor2;
-  private WPI_TalonSRX rightMotor;
-  private WPI_TalonSRX rightMotor2;
+  private TalonSRXWrapper leftMotor;
+  private TalonSRXWrapper leftMotor2;
+  private TalonSRXWrapper rightMotor;
+  private TalonSRXWrapper rightMotor2;
   private JoystickWrapper leftStick;
   private XboxControllerWrapper xboxController;
   private double leftAxis;
@@ -99,11 +99,11 @@ public class Robot extends TimedRobot {
   //Set Controller Type
   int controllerType;
 
-  private WPI_TalonSRX intakeMotor;
-  private WPI_TalonSRX leftDepositorMotor;
-  private WPI_TalonSRX rightDepositorMotor;
-  private TalonFX leftElevatorMotor; //to go up go clockwise
-  private TalonFX rightElevatorMotor; //to go up go counter-clockwise
+  private TalonSRXWrapper intakeMotor;
+  private TalonSRXWrapper leftDepositorMotor;
+  private TalonSRXWrapper rightDepositorMotor;
+  private TalonFXWrapper leftElevatorMotor; //to go up go clockwise
+  private TalonFXWrapper rightElevatorMotor; //to go up go counter-clockwise
 
   
 
@@ -131,11 +131,11 @@ public class Robot extends TimedRobot {
     leftElevatorSolenoid = new SolenoidWrapper(RobotConstants.leftElevatorSolenoidID);
     rightElevatorSolenoid = new SolenoidWrapper(RobotConstants.rightElevatorSolenoidID);
 
-    intakeMotor = new WPI_TalonSRX(RobotConstants.intakeMotorID);
-    leftDepositorMotor = new WPI_TalonSRX(RobotConstants.leftDepositorMotorID);
-    rightDepositorMotor = new WPI_TalonSRX(RobotConstants.rightDepositorMotorID);
-    leftElevatorMotor = new TalonFX(RobotConstants.leftElevatorMotorID);
-    rightElevatorMotor =new TalonFX(RobotConstants.rightElevatorMotorID);
+    intakeMotor = new TalonSRXWrapper(RobotConstants.intakeMotorID);
+    leftDepositorMotor = new TalonSRXWrapper(RobotConstants.leftDepositorMotorID);
+    rightDepositorMotor = new TalonSRXWrapper(RobotConstants.rightDepositorMotorID);
+    leftElevatorMotor = new TalonFXWrapper(RobotConstants.leftElevatorMotorID);
+    rightElevatorMotor =new TalonFXWrapper(RobotConstants.rightElevatorMotorID);
   }
 
 
@@ -201,20 +201,22 @@ public class Robot extends TimedRobot {
     else if (dropBall == true) {
       leftDepositorMotor.set(-0.5);
       rightDepositorMotor.set(0.5);
+      intakeMotor.set(0);
     }
     else {
       leftDepositorMotor.set(0);
       rightDepositorMotor.set(0);
+      intakeMotor.set(0);
     }
     if (xboxController.getRightTriggerAxis() > 0.7) {
-      leftElevatorMotor.set(ControlMode.PercentOutput, 1);
-      rightElevatorMotor.set(ControlMode.PercentOutput, -1);
+      leftElevatorMotor.set(1);
+      rightElevatorMotor.set(-1);
     } else if (xboxController.getLeftTriggerAxis() > 0.7) {
-      leftElevatorMotor.set(ControlMode.PercentOutput, -1);
-      rightElevatorMotor.set(ControlMode.PercentOutput, 1);
+      leftElevatorMotor.set(-1);
+      rightElevatorMotor.set(1);
     } else {
-      leftElevatorMotor.set(ControlMode.PercentOutput, 0);
-      rightElevatorMotor.set(ControlMode.PercentOutput, 0);
+      leftElevatorMotor.set(0);
+      rightElevatorMotor.set(0);
     }
     //double distanceToBall = shark.getDistanceCentimeters();
     //SmartDashboard.putNumber("distanceToBall", distanceToBall);
