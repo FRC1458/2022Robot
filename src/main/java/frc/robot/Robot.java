@@ -204,7 +204,6 @@ public class Robot extends TimedRobot {
       leftDepositorMotor.set(0);
       rightDepositorMotor.set(0);
     }
-
     if (xboxController.getRightTriggerAxis() > 0.7) {
       leftElevatorMotor.clockwise();
       rightElevatorMotor.counter();
