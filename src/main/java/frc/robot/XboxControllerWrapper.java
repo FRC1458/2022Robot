@@ -74,5 +74,7 @@ public class XboxControllerWrapper extends Wrapper{
     public double getLeftTriggerAxis() {
         return xbox.getLeftTriggerAxis();
     }
-
+    public boolean getRightBumper() {
+        return xbox.getRightBumper();
+    }
 }
