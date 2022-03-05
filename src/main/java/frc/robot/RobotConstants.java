@@ -39,4 +39,15 @@ public class RobotConstants {
     public final static double backRightYMeters = -0.273;
 
     public final static double swerveDriveGearRatio = 12.8;
+
+    public final static int intakeMotorID = 0;
+    public final static int rightElevatorMotorID =1;
+    public final static int leftElevatorMotorID = 2;
+    public final static int leftDepositorMotorID =3;
+    public final static int rightDepositorMotorID=4;
+
+    public final static int leftIntakeSolenoidID =0;
+    public final static int rightIntakeSolenoidID =0;
+    public final static int leftElevatorSolenoidID=0;
+    public final static int rightElevatorSolenoidID=0;
 }

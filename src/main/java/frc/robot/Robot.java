@@ -5,6 +5,7 @@
 package frc.robot;
 
 import javax.net.ssl.CertPathTrustManagerParameters;
+import javax.xml.transform.SourceLocator;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -12,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -60,9 +62,14 @@ public class Robot extends TimedRobot {
     SHOOT,
     GO_TO_HUMAN;
 
-    //private final Solenoid solenoid = new Solenoid(0);
+    
   }
+  private final Solenoid leftIntakeSolenoid;
+  private final Solenoid rightIntakeSolenoid;
+  private final Solenoid leftElevatorSolenoid;
+  private final Solenoid rightElevatorSolenoid;
 
+  
   States state;
   private WPI_TalonSRX leftMotor;
   private WPI_TalonSRX leftMotor2;
@@ -94,6 +101,8 @@ public class Robot extends TimedRobot {
   private WPI_TalonSRX leftElevatorMotor; //to go up go clockwise
   private WPI_TalonSRX rightElevatorMotor; //to go up go counter-clockwise
 
+  
+
 
 
   boolean turnTo = false;
@@ -112,6 +121,17 @@ public class Robot extends TimedRobot {
     //navx = new NavX();
 
     //shark = new Lasershark(0);
+
+    leftIntakeSolenoid = new Solenoid(PneumaticsModuleType.REVPH, RobotConstants.leftIntakeSolenoidID);
+    rightIntakeSolenoid = new Solenoid(PneumaticsModuleType.REVPH, RobotConstants.rightIntakeSolenoidID);
+    leftElevatorSolenoid = new Solenoid(PneumaticsModuleType.REVPH, RobotConstants.leftElevatorSolenoidID);
+    rightElevatorSolenoid = new Solenoid(PneumaticsModuleType.REVPH, RobotConstants.rightElevatorSolenoidID);
+
+    intakeMotor = new WPI_TalonSRX(RobotConstants.intakeMotorID);
+    leftDepositorMotor = new WPI_TalonSRX(RobotConstants.leftDepositorMotorID);
+    rightDepositorMotor = new WPI_TalonSRX(RobotConstants.rightDepositorMotorID);
+    leftElevatorMotor = new WPI_TalonSRX(RobotConstants.leftElevatorMotorID);
+    rightElevatorMotor =new WPI_TalonSRX(RobotConstants.rightElevatorMotorID);
   }
 
 
