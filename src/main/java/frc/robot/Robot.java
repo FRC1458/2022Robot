@@ -176,6 +176,7 @@ public class Robot extends TimedRobot {
       elevatorUpButton = xboxController.getBButton();
       climbButton = xboxController.getXButton();
       elevatorDownButton = xboxController.getYButton();
+      dropBall = xboxController.getRightBumper();
     }
     else if (controllerType == 1) {
       xAxis = leftStick.getRawAxis(0);
@@ -198,7 +199,7 @@ public class Robot extends TimedRobot {
       rightDepositorMotor.set(-0.5);
       intakeMotor.set(0.5);
     }
-    else if (xboxController.getBButton() == true) {
+    else if (dropBall == true) {
       leftDepositorMotor.set(-0.5);
       rightDepositorMotor.set(0.5);
     }
