@@ -100,8 +100,8 @@ public class Robot extends TimedRobot {
   private WPI_TalonSRX intakeMotor;
   private WPI_TalonSRX leftDepositorMotor;
   private WPI_TalonSRX rightDepositorMotor;
-  private WPI_TalonSRX leftElevatorMotor; //to go up go clockwise
-  private WPI_TalonSRX rightElevatorMotor; //to go up go counter-clockwise
+  private TalonFX leftElevatorMotor; //to go up go clockwise
+  private TalonFX rightElevatorMotor; //to go up go counter-clockwise
 
   
 
