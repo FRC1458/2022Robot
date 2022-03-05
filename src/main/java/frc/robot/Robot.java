@@ -84,6 +84,7 @@ public class Robot extends TimedRobot {
   private boolean elevatorUpButton;
   private boolean elevatorDownButton;
   private boolean climbButton;
+  private boolean dropBall;
 
   //private NavX navx;
 
@@ -150,27 +151,15 @@ public class Robot extends TimedRobot {
     leftElevatorSolenoid.set(false);
     rightElevatorSolenoid.set(false);
   }
+  
 
   @Override
   public void teleopPeriodic() {
     double xAxis;
     double yAxis;
     double rAxis;
-      // Setting speed of depositor motors
-if (xboxController.getAButton() == true) {
-  leftDepositorMotor.set(0.5);
-  rightDepositorMotor.set(-0.5);
-  intakeMotor.set(0.5);
 
-}
-else if (xboxController.getBButton() == true) {
-  leftDepositorMotor.set(-0.5);
-  rightDepositorMotor.set(0.5);
-}
-else {
-  leftDepositorMotor.set(0);
-  rightDepositorMotor.set(0);
-}
+
 
     //SET CONTROLLER TYPE HERE
     //SET TO 0 FOR XBOX CONTROLLER
@@ -202,6 +191,21 @@ else {
       rAxis = 0;
     }
     
+    // Setting speed of depositor motors
+    if (depositButton == true) {
+      leftDepositorMotor.set(0.5);
+      rightDepositorMotor.set(-0.5);
+      intakeMotor.set(0.5);
+    }
+    else if (xboxController.getBButton() == true) {
+      leftDepositorMotor.set(-0.5);
+      rightDepositorMotor.set(0.5);
+    }
+    else {
+      leftDepositorMotor.set(0);
+      rightDepositorMotor.set(0);
+    }
+
     //double distanceToBall = shark.getDistanceCentimeters();
     //SmartDashboard.putNumber("distanceToBall", distanceToBall);
 
@@ -219,7 +223,7 @@ else {
       }
     }
     */
-
+    
     swerveDrive.drive(-xAxis, yAxis, rAxis);
 
     
