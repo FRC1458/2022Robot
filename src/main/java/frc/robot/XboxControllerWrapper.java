@@ -12,7 +12,7 @@ public class XboxControllerWrapper extends Wrapper{
     public XboxControllerWrapper(int port) {
         this.port = port;
         xbox = new XboxController(this.port);
-        deadZone = 0.1;
+        deadZone = 0.15;
     }
 
     public double getRightX() {
