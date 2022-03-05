@@ -206,7 +206,6 @@ public class Robot extends TimedRobot {
       leftDepositorMotor.set(0);
       rightDepositorMotor.set(0);
     }
-
     if (xboxController.getRightTriggerAxis() > 0.7) {
       leftElevatorMotor.set(ControlMode.PercentOutput, 1);
       rightElevatorMotor.set(ControlMode.PercentOutput, -1);
