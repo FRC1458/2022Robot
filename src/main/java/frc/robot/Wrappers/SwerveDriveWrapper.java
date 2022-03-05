@@ -13,7 +13,7 @@ public class SwerveDriveWrapper extends Wrapper{
     public SwerveDriveWrapper () {
         try{
             swervedrive = new SwerveDrive() ;
-            
+            isInitialized = true;
         }
         catch (RuntimeException ex ){
             DriverStation.reportError("Error instantiating swervedrive:  " + ex.getMessage(), true);
@@ -22,11 +22,11 @@ public class SwerveDriveWrapper extends Wrapper{
     }
 
     public void drive(double x, double y, double r) {
-        swervedrive.drive(x, y, r);
+        if (isInitialized) swervedrive.drive(x, y, r);
     }
 
     public void setEncoders() {
-        swervedrive.setEncoders();
+        if (isInitialized) swervedrive.setEncoders();
     }
 
 }

@@ -1,6 +1,7 @@
 package frc.robot.wrappers;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class JoystickWrapper extends Wrapper{
     
@@ -9,23 +10,33 @@ public class JoystickWrapper extends Wrapper{
     int port;
 
     public JoystickWrapper(int port) {
-        this.port = port;
-        js = new Joystick(this.port);
-        deadZone = 0.1;
+        try{
+            this.port = port;
+            js = new Joystick(this.port);
+            deadZone = 0.1;
+        }
+        catch (RuntimeException ex ) {
+            DriverStation.reportError("Error Initiating CAN Spark Max:  " + ex.getMessage(), true);
+        }
     }
 
     public double getRawAxis(int ID) {
-        if (Math.abs(js.getRawAxis(ID)) < deadZone) {
-            return 0.0;
-        }
-        return js.getRawAxis(ID);
+        if (isInitialized) {
+            if (Math.abs(js.getRawAxis(ID)) < deadZone) {
+                return 0.0;
+            }
+            return js.getRawAxis(ID);
+        }  
+        return 0; 
     }
 
     public boolean getRawButton(int ID) {
-        return js.getRawButton(ID);
+        if (isInitialized) return js.getRawButton(ID);
+        return false;
     }
 
     public double getPOV() {
-        return js.getPOV();
+        if (isInitialized) return js.getPOV();
+        return -1;
     }
 }

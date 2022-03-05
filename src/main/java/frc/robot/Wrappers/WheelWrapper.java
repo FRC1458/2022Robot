@@ -11,6 +11,7 @@ public class WheelWrapper extends Wrapper{
     public WheelWrapper (int angleMotorID, int speedMotorID, int absoluteEncoderID, String wheelName) {
         try{
             wheel = new Wheel(angleMotorID, speedMotorID, absoluteEncoderID, wheelName);
+            isInitialized = true;
         }
         catch (RuntimeException ex ) {
             DriverStation.reportError("Error Initiating Wheel:  " + ex.getMessage(), true);
@@ -18,11 +19,11 @@ public class WheelWrapper extends Wrapper{
     }
 
     public void drive(SwerveModuleState state) {
-        wheel.drive(state.speedMetersPerSecond, state.angle.getDegrees());
+        if (isInitialized) wheel.drive(state.speedMetersPerSecond, state.angle.getDegrees());
     }
     
     public void setEncoders(double offset) {
-        wheel.setEncoders(offset);
+        if (isInitialized) wheel.setEncoders(offset);
     }
 
 }

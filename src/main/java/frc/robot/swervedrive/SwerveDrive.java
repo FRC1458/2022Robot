@@ -124,4 +124,7 @@ public class SwerveDrive {
         SmartDashboard.putNumber("back right absolute", frontRight.getAbsoluteEncoderValue());
 
     }
+    public void resetNavX () {
+        ahrs.reset();
+    }
 }

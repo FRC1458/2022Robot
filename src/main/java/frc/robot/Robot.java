@@ -86,6 +86,7 @@ public class Robot extends TimedRobot {
   private boolean elevatorDownButton;
   private boolean climbButton;
   private boolean dropBall;
+  private boolean resetNavX;
 
   //private NavX navx;
 
@@ -143,6 +144,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     //set to defaults
     autonomousInit();
+    swerveDrive.setEncoders();
   }
 
   @Override
@@ -176,6 +178,7 @@ public class Robot extends TimedRobot {
       climbButton = xboxController.getXButton();
       elevatorDownButton = xboxController.getYButton();
       dropBall = xboxController.getRightBumper();
+      resetNavX = xboxController.getStartButton();
     }
     else if (controllerType == 1) {
       xAxis = leftStick.getRawAxis(0);
@@ -193,12 +196,12 @@ public class Robot extends TimedRobot {
     }
     
     // Setting speed of depositor motors
-    if (depositButton == true) {
+    if (depositButton) {
       leftDepositorMotor.set(0.5);
       rightDepositorMotor.set(-0.5);
       intakeMotor.set(0.5);
     }
-    else if (dropBall == true) {
+    else if (dropBall) {
       leftDepositorMotor.set(-0.5);
       rightDepositorMotor.set(0.5);
       intakeMotor.set(0);
@@ -218,6 +221,9 @@ public class Robot extends TimedRobot {
       leftElevatorMotor.set(0);
       rightElevatorMotor.set(0);
     }
+    if (resetNavX) {
+      swerveDrive.resetNavX();
+    }
     //double distanceToBall = shark.getDistanceCentimeters();
     //SmartDashboard.putNumber("distanceToBall", distanceToBall);
 
@@ -236,7 +242,7 @@ public class Robot extends TimedRobot {
     }
     */
     
-    swerveDrive.drive(-xAxis, yAxis, rAxis);
+    swerveDrive.drive(-(Math.abs(xAxis)*xAxis), Math.abs(yAxis)*yAxis, Math.abs(rAxis)*rAxis);
 
     
 
@@ -422,5 +428,4 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
   }
-
-}
+} 
