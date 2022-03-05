@@ -163,36 +163,40 @@ public class Robot extends TimedRobot {
 
 
 
-    //SET CONTROLLER TYPE HERE
-    //SET TO 0 FOR XBOX CONTROLLER
-    //SET TO 1 FOR EVERYTHING ELSE
+    // JSDOC intellisense (your IDE will thank me)
+    /** Set Controller Type
+    * @value {int} Controler type value
+    * 1 = Xbox | 2 = Other
+    **/
     controllerType = 0;
 
-    //Controllers
-    if (controllerType == 0) {
-      xAxis = xboxController.getLeftX();
-      yAxis = xboxController.getLeftY();
-      rAxis = xboxController.getRightX();
-      depositButton = xboxController.getAButton();
-      elevatorUpButton = xboxController.getBButton();
-      climbButton = xboxController.getXButton();
-      elevatorDownButton = xboxController.getYButton();
-      dropBall = xboxController.getRightBumper();
-      resetNavX = xboxController.getStartButton();
-    }
-    else if (controllerType == 1) {
-      xAxis = leftStick.getRawAxis(0);
-      yAxis = leftStick.getRawAxis(1);
-      rAxis = leftStick.getRawAxis(3);
-      depositButton = leftStick.getRawButton(0);
-      elevatorUpButton = leftStick.getRawButton(1);
-      climbButton = leftStick.getRawButton(2);
-      elevatorDownButton = leftStick.getRawButton(3);
-    }
-    else {
-      xAxis = 0;
-      yAxis = 0;
-      rAxis = 0;
+    //Switch statements reduces runtime overhead
+    switch (controllerType) {
+      case 0: // XBOX Controller
+        xAxis = xboxController.getLeftX();
+        yAxis = xboxController.getLeftY();
+        rAxis = xboxController.getRightX();
+        depositButton = xboxController.getAButton();
+        elevatorUpButton = xboxController.getBButton();
+        climbButton = xboxController.getXButton();
+        elevatorDownButton = xboxController.getYButton();
+        dropBall = xboxController.getRightBumper();
+        resetNavX = xboxController.getStartButton();
+        break;
+      case 1: // Everything Else
+        xAxis = leftStick.getRawAxis(0);
+        yAxis = leftStick.getRawAxis(1);
+        rAxis = leftStick.getRawAxis(3);
+        depositButton = leftStick.getRawButton(0);
+        elevatorUpButton = leftStick.getRawButton(1);
+        climbButton = leftStick.getRawButton(2);
+        elevatorDownButton = leftStick.getRawButton(3);
+        break;
+      default: // No Controller Present
+        xAxis = 0;
+        yAxis = 0;
+        rAxis = 0;
+        break;
     }
     
     // Setting speed of depositor motors
