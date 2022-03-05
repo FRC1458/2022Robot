@@ -77,13 +77,15 @@ public class Robot extends TimedRobot {
   private WPI_TalonSRX rightMotor2;
   private JoystickWrapper leftStick;
   private XboxControllerWrapper xboxController;
-  private boolean button1;
-  private boolean button2;
-  private boolean button3;
   private double leftAxis;
   private double rightAxis;
 
-  private NavX navx;
+  private boolean depositButton;
+  private boolean elevatorUpButton;
+  private boolean elevatorDownButton;
+  private boolean climbButton;
+
+  //private NavX navx;
 
   //Camera topCam;
   //Camera bottomCam;
@@ -147,10 +149,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    button1 = leftStick.getRawButton(1);
-    button2 = leftStick.getRawButton(2);
-    button3 = leftStick.getRawButton(3);
-
     double xAxis;
     double yAxis;
     double rAxis;
@@ -165,11 +163,19 @@ public class Robot extends TimedRobot {
       xAxis = xboxController.getLeftX();
       yAxis = xboxController.getLeftY();
       rAxis = xboxController.getRightX();
+      depositButton = xboxController.getAButton();
+      elevatorUpButton = xboxController.getBButton();
+      climbButton = xboxController.getXButton();
+      elevatorDownButton = xboxController.getYButton();
     }
     else if (controllerType == 1) {
       xAxis = leftStick.getRawAxis(0);
       yAxis = leftStick.getRawAxis(1);
       rAxis = leftStick.getRawAxis(3);
+      depositButton = leftStick.getRawButton(0);
+      elevatorUpButton = leftStick.getRawButton(1);
+      climbButton = leftStick.getRawButton(2);
+      elevatorDownButton = leftStick.getRawButton(3);
     }
     else {
       xAxis = 0;

@@ -43,6 +43,22 @@ public class XboxControllerWrapper extends Wrapper{
         return xbox.getLeftY();
     }
 
+    public boolean getAButton() {
+        return xbox.getAButton();
+    }
+    
+    public boolean getXButton() {
+        return xbox.getXButton();
+    }
+    
+    public boolean getBButton() {
+        return xbox.getBButton();
+    }
+    
+    public boolean getYButton() {
+        return xbox.getYButton();
+    }
+
     // public boolean getRawButton(int ID) {
     //     return js.getRawButton(ID);
     // }
