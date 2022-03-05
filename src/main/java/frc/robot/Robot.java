@@ -132,8 +132,8 @@ public class Robot extends TimedRobot {
     intakeMotor = new WPI_TalonSRX(RobotConstants.intakeMotorID);
     leftDepositorMotor = new WPI_TalonSRX(RobotConstants.leftDepositorMotorID);
     rightDepositorMotor = new WPI_TalonSRX(RobotConstants.rightDepositorMotorID);
-    leftElevatorMotor = new WPI_TalonSRX(RobotConstants.leftElevatorMotorID);
-    rightElevatorMotor =new WPI_TalonSRX(RobotConstants.rightElevatorMotorID);
+    leftElevatorMotor = new TalonFX(RobotConstants.leftElevatorMotorID);
+    rightElevatorMotor =new TalonFX(RobotConstants.rightElevatorMotorID);
   }
 
 
