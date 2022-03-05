@@ -84,6 +84,7 @@ public class Robot extends TimedRobot {
   private boolean elevatorUpButton;
   private boolean elevatorDownButton;
   private boolean climbButton;
+  private boolean dropBall;
 
   //private NavX navx;
 
@@ -103,7 +104,7 @@ public class Robot extends TimedRobot {
   private TalonFX leftElevatorMotor; //to go up go clockwise
   private TalonFX rightElevatorMotor; //to go up go counter-clockwise
 
-  
+
 
 
 
@@ -145,13 +146,20 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    leftIntakeSolenoid.set(false);
+    rightIntakeSolenoid.set(false);
+    leftElevatorSolenoid.set(false);
+    rightElevatorSolenoid.set(false);
   }
+  
 
   @Override
   public void teleopPeriodic() {
     double xAxis;
     double yAxis;
     double rAxis;
+
+
 
     //SET CONTROLLER TYPE HERE
     //SET TO 0 FOR XBOX CONTROLLER
@@ -183,17 +191,21 @@ public class Robot extends TimedRobot {
       rAxis = 0;
     }
     
-    if (xboxController.getRightTriggerAxis() > 0.7){
-      leftElevatorMotor.clockwise();
-      rightElevatorMotor.counter();
-    } else if (xboxController.getLeftTriggerAxis > 0.7) {
-      leftElevatorMotor.counter();
-      rightElevatorMotor.clockwise();
-    } else {
-      leftElevatorMotor.set(0);
-      rightElevatorMotor.set(0);
+    // Setting speed of depositor motors
+    if (depositButton == true) {
+      leftDepositorMotor.set(0.5);
+      rightDepositorMotor.set(-0.5);
+      intakeMotor.set(0.5);
     }
-    
+    else if (xboxController.getBButton() == true) {
+      leftDepositorMotor.set(-0.5);
+      rightDepositorMotor.set(0.5);
+    }
+    else {
+      leftDepositorMotor.set(0);
+      rightDepositorMotor.set(0);
+    }
+
     //double distanceToBall = shark.getDistanceCentimeters();
     //SmartDashboard.putNumber("distanceToBall", distanceToBall);
 
@@ -211,7 +223,7 @@ public class Robot extends TimedRobot {
       }
     }
     */
-
+    
     swerveDrive.drive(-xAxis, yAxis, rAxis);
 
     
@@ -379,7 +391,7 @@ public class Robot extends TimedRobot {
     if (distanceToHub == 0) {
       return true;
     }
-    return false; 
+    return false;
   }
   public boolean ballDropped(){
     boolean hasBall;
