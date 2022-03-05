@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj.XboxController;
 
 //import edu.wpi.first.wpilibj.Ultrasonic;
 
+import edu.wpi.first.wpilibj.Solenoid;
 
 //class Camera;
 /**sssP
@@ -58,6 +59,8 @@ public class Robot extends TimedRobot {
     AIM,
     SHOOT,
     GO_TO_HUMAN;
+
+    //private final Solenoid solenoid = new Solenoid(0);
   }
 
   States state;
@@ -84,6 +87,14 @@ public class Robot extends TimedRobot {
 
   //Set Controller Type
   int controllerType;
+
+  private WPI_TalonSRX intakeMotor;
+  private WPI_TalonSRX leftDepositorMotor;
+  private WPI_TalonSRX rightDepositorMotor;
+  private WPI_TalonSRX leftElevatorMotor; //to go up go clockwise
+  private WPI_TalonSRX rightElevatorMotor; //to go up go counter-clockwise
+
+
 
   boolean turnTo = false;
 
@@ -344,6 +355,7 @@ public class Robot extends TimedRobot {
   
   @Override
   public void autonomousInit() {
+    
   }
 
   @Override
