@@ -104,7 +104,7 @@ public class Robot extends TimedRobot {
   private TalonFX leftElevatorMotor; //to go up go clockwise
   private TalonFX rightElevatorMotor; //to go up go counter-clockwise
 
-
+  
 
 
 
@@ -148,8 +148,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     leftIntakeSolenoid.set(false);
     rightIntakeSolenoid.set(false);
-    leftElevatorSolenoid.set(false);
-    rightElevatorSolenoid.set(false);
+    
   }
   
 
@@ -175,7 +174,6 @@ public class Robot extends TimedRobot {
       elevatorUpButton = xboxController.getBButton();
       climbButton = xboxController.getXButton();
       elevatorDownButton = xboxController.getYButton();
-      dropBall = xboxController.getRightBumper();
     }
     else if (controllerType == 1) {
       xAxis = leftStick.getRawAxis(0);
@@ -198,7 +196,7 @@ public class Robot extends TimedRobot {
       rightDepositorMotor.set(-0.5);
       intakeMotor.set(0.5);
     }
-    else if (dropBall == true) {
+    else if (xboxController.getBButton() == true) {
       leftDepositorMotor.set(-0.5);
       rightDepositorMotor.set(0.5);
     }
@@ -293,7 +291,7 @@ public class Robot extends TimedRobot {
     if (leftAxis == -1) {
       leftMotor.set(-0.1);
       leftMotor2.set(-0.1);
-    }
+    } 
     else if (leftAxis < -0.5) {
       leftMotor.set(0.1);
       leftMotor2.set(0.1);
@@ -383,7 +381,7 @@ public class Robot extends TimedRobot {
     }
     return false;
   }
-  public boolean reachedBall(){
+ -= public boolean reachedBall(){
     int distanceToBall;
     if (distanceToBall == 0){
       return true;
@@ -402,7 +400,7 @@ public class Robot extends TimedRobot {
     if (distanceToHub == 0) {
       return true;
     }
-    return false;
+    return false; 
   }
   public boolean ballDropped(){
     boolean hasBall;
@@ -420,7 +418,5 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-
   }
-  
 }
