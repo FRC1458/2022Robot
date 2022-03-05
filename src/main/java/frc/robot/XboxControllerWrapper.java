@@ -66,4 +66,13 @@ public class XboxControllerWrapper extends Wrapper{
     // public double getPOV() {
     //     return js.getPOV();
     // }
+
+    public double getRightTriggerAxis() {
+        return xbox.getRightTriggerAxis();
+    }
+    
+    public double getLeftTriggerAxis() {
+        return xbox.getLeftTriggerAxis();
+    }
+
 }
