@@ -12,10 +12,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotConstants;
+import frc.robot.wrappers.Wrapper;
 import edu.wpi.first.math.geometry.Rotation2d;
-
-//Wrapper
-import frc.robot.Wrapper;
 
 
 public class Wheel{

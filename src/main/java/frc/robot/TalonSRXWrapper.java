@@ -1,5 +1,8 @@
 package frc.robot;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import frc.robot.wrappers.Wrapper;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class TalonSRXWrapper extends Wrapper {

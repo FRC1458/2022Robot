@@ -28,8 +28,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.RobotConstants;
 import frc.robot.swervedrive.SwerveDrive;
 import frc.robot.swervedrive.Wheel;
-import frc.robot.JoystickWrapper;
-import frc.robot.NavXWrapper;
+import frc.robot.wrappers.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
@@ -127,10 +126,10 @@ public class Robot extends TimedRobot {
 
     //shark = new Lasershark(0);
 
-    leftIntakeSolenoid = new Solenoid(PneumaticsModuleType.REVPH, RobotConstants.leftIntakeSolenoidID);
-    rightIntakeSolenoid = new Solenoid(PneumaticsModuleType.REVPH, RobotConstants.rightIntakeSolenoidID);
-    leftElevatorSolenoid = new Solenoid(PneumaticsModuleType.REVPH, RobotConstants.leftElevatorSolenoidID);
-    rightElevatorSolenoid = new Solenoid(PneumaticsModuleType.REVPH, RobotConstants.rightElevatorSolenoidID);
+    leftIntakeSolenoid = new SolenoidWrapper(RobotConstants.leftIntakeSolenoidID);
+    rightIntakeSolenoid = new SolenoidWrapper(RobotConstants.rightIntakeSolenoidID);
+    leftElevatorSolenoid = new SolenoidWrapper(RobotConstants.leftElevatorSolenoidID);
+    rightElevatorSolenoid = new SolenoidWrapper(RobotConstants.rightElevatorSolenoidID);
 
     intakeMotor = new WPI_TalonSRX(RobotConstants.intakeMotorID);
     leftDepositorMotor = new WPI_TalonSRX(RobotConstants.leftDepositorMotorID);

@@ -1,7 +1,7 @@
-package frc.robot.swervedrive;
+package frc.robot.wrappers;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.Wrapper;
+import frc.robot.swervedrive.Wheel;
 
 //Help me I'm trapped in a WheelWrapper factory.
 

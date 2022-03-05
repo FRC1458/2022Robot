@@ -1,4 +1,6 @@
-package frc.robot;
+package frc.robot.wrappers;
+
+import frc.robot.*;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
