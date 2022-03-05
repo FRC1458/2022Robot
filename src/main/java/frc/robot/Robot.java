@@ -31,6 +31,8 @@ import frc.robot.swervedrive.Wheel;
 import frc.robot.JoystickWrapper;
 import frc.robot.NavXWrapper;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 //import com.cuforge.libcu.Lasershark;
 
 //Xbox support
@@ -206,14 +208,14 @@ public class Robot extends TimedRobot {
     }
 
     if (xboxController.getRightTriggerAxis() > 0.7) {
-      leftElevatorMotor.set(1);
-      rightElevatorMotor.set(-1);
+      leftElevatorMotor.set(ControlMode.PercentOutput, 1);
+      rightElevatorMotor.set(ControlMode.PercentOutput, -1);
     } else if (xboxController.getLeftTriggerAxis() > 0.7) {
-      leftElevatorMotor.set(-1);
-      rightElevatorMotor.set(1);
+      leftElevatorMotor.set(ControlMode.PercentOutput, -1);
+      rightElevatorMotor.set(ControlMode.PercentOutput, 1);
     } else {
-      leftElevatorMotor.set(0);
-      rightElevatorMotor.set(0);
+      leftElevatorMotor.set(ControlMode.PercentOutput, 0);
+      rightElevatorMotor.set(ControlMode.PercentOutput, 0);
     }
     //double distanceToBall = shark.getDistanceCentimeters();
     //SmartDashboard.putNumber("distanceToBall", distanceToBall);
