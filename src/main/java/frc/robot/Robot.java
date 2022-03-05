@@ -207,6 +207,16 @@ public class Robot extends TimedRobot {
       rightDepositorMotor.set(0);
     }
 
+    if (xboxController.getRightTriggerAxis() > 0.7) {
+      leftElevatorMotor.clockwise();
+      rightElevatorMotor.counter();
+    } else if (xboxController.getLeftTriggerAxis() > 0.7) {
+      leftElevatorMotor.counter();
+      rightElevatorMotor.clockwise();
+    } else {
+      leftElevatorMotor.set(0);
+      rightElevatorMotor.set(0);
+    }
     //double distanceToBall = shark.getDistanceCentimeters();
     //SmartDashboard.putNumber("distanceToBall", distanceToBall);
 
