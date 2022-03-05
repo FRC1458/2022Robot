@@ -153,6 +153,20 @@ public class Robot extends TimedRobot {
     double yAxis;
     double rAxis;
 
+// Setting speed of depositor motors
+if (xboxController.getAButton() == true) {
+  leftDepositorMotor.set(0.5);
+  rightDepositorMotor.set(-0.5);
+}
+else if (xboxController.getBButton() == true) {
+  leftDepositorMotor.set(-0.5);
+  rightDepositorMotor.set(0.5);
+}
+else {
+  leftDepositorMotor.set(0);
+  rightDepositorMotor.set(0);
+}
+
     //SET CONTROLLER TYPE HERE
     //SET TO 0 FOR XBOX CONTROLLER
     //SET TO 1 FOR EVERYTHING ELSE
