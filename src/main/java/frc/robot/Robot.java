@@ -145,6 +145,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    leftIntakeSolenoid.set(false);
+    rightIntakeSolenoid.set(false);
+    leftElevatorSolenoid.set(false);
+    rightElevatorSolenoid.set(false);
   }
 
   @Override
@@ -152,11 +156,12 @@ public class Robot extends TimedRobot {
     double xAxis;
     double yAxis;
     double rAxis;
-
-// Setting speed of depositor motors
+      // Setting speed of depositor motors
 if (xboxController.getAButton() == true) {
   leftDepositorMotor.set(0.5);
   rightDepositorMotor.set(-0.5);
+  intakeMotor.set(0.5);
+
 }
 else if (xboxController.getBButton() == true) {
   leftDepositorMotor.set(-0.5);
