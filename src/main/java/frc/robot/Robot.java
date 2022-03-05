@@ -66,10 +66,10 @@ public class Robot extends TimedRobot {
 
     
   }
-  private final Solenoid leftIntakeSolenoid;
-  private final Solenoid rightIntakeSolenoid;
-  private final Solenoid leftElevatorSolenoid;
-  private final Solenoid rightElevatorSolenoid;
+  private final SolenoidWrapper leftIntakeSolenoid;
+  private final SolenoidWrapper rightIntakeSolenoid;
+  private final SolenoidWrapper leftElevatorSolenoid;
+  private final SolenoidWrapper rightElevatorSolenoid;
 
   
   States state;
@@ -136,7 +136,7 @@ public class Robot extends TimedRobot {
     leftDepositorMotor = new WPI_TalonSRX(RobotConstants.leftDepositorMotorID);
     rightDepositorMotor = new WPI_TalonSRX(RobotConstants.rightDepositorMotorID);
     leftElevatorMotor = new TalonFX(RobotConstants.leftElevatorMotorID);
-    rightElevatorMotor =new TalonFX(RobotConstants.rightElevatorMotorID);
+    rightElevatorMotor = new TalonFX(RobotConstants.rightElevatorMotorID);
   }
 
 
@@ -421,4 +421,5 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
   }
+
 }
