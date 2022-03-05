@@ -205,11 +205,11 @@ public class Robot extends TimedRobot {
       rightDepositorMotor.set(0);
     }
     if (xboxController.getRightTriggerAxis() > 0.7) {
-      leftElevatorMotor.clockwise();
-      rightElevatorMotor.counter();
+      leftElevatorMotor.set(1);
+      rightElevatorMotor.set(-1);
     } else if (xboxController.getLeftTriggerAxis() > 0.7) {
-      leftElevatorMotor.counter();
-      rightElevatorMotor.clockwise();
+      leftElevatorMotor.set(-1);
+      rightElevatorMotor.set(1);
     } else {
       leftElevatorMotor.set(0);
       rightElevatorMotor.set(0);
