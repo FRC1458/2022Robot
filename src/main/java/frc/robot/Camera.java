@@ -16,9 +16,9 @@ public class Camera {
     private VisionThread visionThread;
     private final Object imgLock = new Object();
     double centerX, size;
+    private UsbCamera camera;
 
     public Camera (boolean onBlue) {
-        UsbCamera camera;
 
         try {
             camera = CameraServer.startAutomaticCapture();
@@ -75,6 +75,10 @@ public class Camera {
         synchronized (imgLock) {
             return size;
         }
+    }
+
+    public void endCamera() {
+        camera.close();
     }
 
 }

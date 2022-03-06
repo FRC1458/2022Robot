@@ -96,7 +96,7 @@ public class Robot extends TimedRobot {
 
   //Camera topCam;
   //Camera bottomCam;
-  //Camera ballCamera;
+  CameraWrapper ballCamera;
   SwerveDrive swerveDrive;
 
   //Lasershark shark;
@@ -127,7 +127,7 @@ public class Robot extends TimedRobot {
     //Ball = new Ball();
     state = States.MANUAL;
     swerveDrive = new SwerveDrive();
-    //camera = new CameraWrapper(true);
+    ballCamera = new CameraWrapper(true);
 
     //navx = new NavX();
 
@@ -168,7 +168,7 @@ public class Robot extends TimedRobot {
     double rAxis;
 
 
-    //SmartDashboard.putNumber("BallX", camera.getBallX());
+    SmartDashboard.putNumber("BallX", ballCamera.getBallX());
 
 
     //SET CONTROLLER TYPE HERE
@@ -292,19 +292,19 @@ public class Robot extends TimedRobot {
     // swerveDrive.backLeft.drive(0.1, SmartDashboard.getNumber("BL angle", 0));
     // swerveDrive.backRight.drive(0.1, SmartDashboard.getNumber("BR angle", 0));
 
-    // SmartDashboard.putNumber("BallX", camera.getBallX());
-    // if (Math.abs(camera.getBallX()) < 1) {
-    //   if (camera.getBallX() > .1) {
-    //     swerveDrive.drive(0, 0, -.1, false);
-    //   } else if (camera.getBallX() < -.1) {
-    //     swerveDrive.drive(0, 0, .1, false);
-    //   }
-    //   else {
-    //     swerveDrive.drive(0, -.1, 0, false);
-    //   }
-    // }
-    // else {
-    //   swerveDrive.drive(0, 0, 0, false);
-    // }
+    SmartDashboard.putNumber("BallX", ballCamera.getBallX());
+    if (Math.abs(ballCamera.getBallX()) < 1) {
+      if (ballCamera.getBallX() > .1) {
+        swerveDrive.drive(0, 0, -.1, false);
+      } else if (ballCamera.getBallX() < -.1) {
+        swerveDrive.drive(0, 0, .1, false);
+      }
+      else {
+        swerveDrive.drive(0, -.1, 0, false);
+      }
+    }
+    else {
+      swerveDrive.drive(0, 0, 0, false);
+    }
   }
 }
