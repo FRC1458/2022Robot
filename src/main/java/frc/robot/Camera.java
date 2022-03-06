@@ -6,15 +6,15 @@ import org.opencv.core.KeyPoint;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.vision.VisionThread;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Camera {
     private static final int IMG_WIDTH = 320;
     private static final int IMG_HEIGHT = 240;
-    private VisionThread visionThread;
+    //private VisionThread visionThread;
     private final Object imgLock = new Object();
+    private VisionThread visionThread;
     double centerX, size;
     private UsbCamera camera;
 
