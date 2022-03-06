@@ -26,4 +26,10 @@ public class CameraWrapper extends Wrapper{
         if (isInitialized) return camera.getBallSize();
         return 0;
     }
+
+    public void endCamera() {
+        if (isInitialized) camera.endCamera();
+        isInitialized = false;
+        camera = null;
+    }
 }

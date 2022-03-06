@@ -155,6 +155,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    ballCamera = new CameraWrapper(true);
     leftIntakeSolenoid.set(false);
     rightIntakeSolenoid.set(false);
 
@@ -274,6 +275,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    ballCamera = new CameraWrapper(true);
   //   SmartDashboard.putNumber("FL angle", 0);
   //   SmartDashboard.putNumber("FR angle", 0);
   //   SmartDashboard.putNumber("BL angle", 0);
@@ -307,4 +309,15 @@ public class Robot extends TimedRobot {
       swerveDrive.drive(0, 0, 0, false);
     }
   }
+
+  @Override
+  public void teleopExit() {
+    ballCamera.endCamera();
+  }
+  
+  @Override
+  public void autonomousExit() {
+    ballCamera.endCamera();
+  }
+
 }

@@ -78,6 +78,7 @@ public class Camera {
     }
 
     public void endCamera() {
+        visionThread.stopVision();
         camera.close();
     }
 
