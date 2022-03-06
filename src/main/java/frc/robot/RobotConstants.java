@@ -4,7 +4,7 @@ public class RobotConstants {
     public final static int frontLeftAngleID = 19;
     public final static int frontRightAngleID = 15;
     public final static int backLeftAngleID = 13;
-    public final static int backRightAngleID = 8;
+    public final static int backRightAngleID = 17;
     
     public final static int frontLeftSpeedID = 9;
     public final static int frontRightSpeedID = 5;
@@ -25,9 +25,11 @@ public class RobotConstants {
     public final static double betaY = 1;
     public final static double gammaR = 1;
 
-    public final static double kP = 0.2;
+    public final static double kP = 0.1;
     public final static double kI = 0.000001;
     public final static double kD = 0.000001;
+
+    public final static double angleMotorMaxSpeed = 0.01;
 
     public final static double frontLeftXMeters = 0.273;
     public final static double frontLeftYMeters = 0.273;

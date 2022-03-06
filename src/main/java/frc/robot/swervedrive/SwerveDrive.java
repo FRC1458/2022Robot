@@ -12,22 +12,24 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.SPI;
 import com.kauailabs.navx.frc.AHRS;
 
+import frc.robot.wrappers.*;
+
 public class SwerveDrive {
     ChassisSpeeds speeds;
-    Wheel frontLeft;
-    Wheel frontRight;
-    Wheel backLeft;
-    Wheel backRight;
+    public final Wheel frontLeft;
+    public final Wheel frontRight;
+    public final Wheel backLeft;
+    public final Wheel backRight;
     SwerveDriveKinematics kinematics;
     SwerveDriveOdometry odometry;
     Pose2d pose;
     AHRS ahrs;
 
     public SwerveDrive() {
-        frontLeft = new Wheel(RobotConstants.frontLeftAngleID, RobotConstants.frontLeftSpeedID, RobotConstants.frontLeftAbsoluteEncoderID, "Front Left (1)");
-        frontRight = new Wheel(RobotConstants.frontRightAngleID, RobotConstants.frontRightSpeedID, RobotConstants.frontRightAbsoluteEncoderID, "Front Right (2)");
-        backLeft = new Wheel(RobotConstants.backLeftAngleID, RobotConstants.backLeftSpeedID, RobotConstants.backLeftAbsoluteEncoderID, "Back Left (3)");
-        backRight = new Wheel(RobotConstants.backRightAngleID, RobotConstants.backRightSpeedID, RobotConstants.backRightAbsoluteEncoderID, "Back Right (4)");
+        frontLeft = new Wheel(RobotConstants.frontLeftAngleID, RobotConstants.frontLeftSpeedID, RobotConstants.frontLeftAbsoluteEncoderID, "Front Left (1)", RobotConstants.frontLeftAngleOffset);
+        frontRight = new Wheel(RobotConstants.frontRightAngleID, RobotConstants.frontRightSpeedID, RobotConstants.frontRightAbsoluteEncoderID, "Front Right (2)", RobotConstants.frontRightAngleOffset);
+        backLeft = new Wheel(RobotConstants.backLeftAngleID, RobotConstants.backLeftSpeedID, RobotConstants.backLeftAbsoluteEncoderID, "Back Left (3)", RobotConstants.backLeftAngleOffset);
+        backRight = new Wheel(RobotConstants.backRightAngleID, RobotConstants.backRightSpeedID, RobotConstants.backRightAbsoluteEncoderID, "Back Right (4)", RobotConstants.backRightAngleOffset);
 
         // Locations for the swerve drive modules relative to the robot center.
         Translation2d frontLeftLocation = new Translation2d(RobotConstants.frontLeftXMeters, RobotConstants.frontLeftYMeters);
@@ -44,12 +46,14 @@ public class SwerveDrive {
         ahrs = new AHRS(SPI.Port.kMXP);
     }
 
-    public void drive(double x, double y, double r) {
+    public void drive(double x, double y, double r, boolean fieldOriented) {
         speeds.vxMetersPerSecond = x;
         speeds.vyMetersPerSecond = y;
         speeds.omegaRadiansPerSecond = r;
 
-        speeds = ChassisSpeeds.fromFieldRelativeSpeeds(x, y, r, Rotation2d.fromDegrees(-ahrs.getYaw()));
+        if (fieldOriented) {
+            speeds = ChassisSpeeds.fromFieldRelativeSpeeds(x, y, r, Rotation2d.fromDegrees(-ahrs.getYaw()));
+        }
         SmartDashboard.putNumber("angle from navx", ahrs.getYaw());
 
         SmartDashboard.putNumber("X", x);
@@ -58,12 +62,6 @@ public class SwerveDrive {
         SmartDashboard.putNumber("Robot Angle", ahrs.getYaw());
 
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
-
-        SmartDashboard.putNumber("SpeedMotorFront", states[1].speedMetersPerSecond);
-        SmartDashboard.putNumber("AngleMotorFront", states[1].angle.getDegrees());
-
-        SmartDashboard.putNumber("SpeedMotorBack", states[1].speedMetersPerSecond);
-        SmartDashboard.putNumber("AngleMotorBack", states[1].angle.getDegrees());
 
         //Set to angle that we get from the NavX
         //double angle = 0;
@@ -77,6 +75,10 @@ public class SwerveDrive {
         frontRight.drive(states[0].speedMetersPerSecond, states[0].angle.getDegrees());
         backLeft.drive(states[3].speedMetersPerSecond, states[3].angle.getDegrees());
         backRight.drive(states[1].speedMetersPerSecond, states[1].angle.getDegrees());
+
+        SmartDashboard.putNumber("Back Left goal angle", states[3].angle.getDegrees());
+        SmartDashboard.putNumber("Back Left actual angle", backLeft.encoder.getPosition() * (360 / RobotConstants.swerveDriveGearRatio) % 360);
+        SmartDashboard.putNumber("Difference", (states[3].angle.getDegrees() - (backLeft.encoder.getPosition() * (360 / RobotConstants.swerveDriveGearRatio) % 360) ) % 360);
     }
 
     public double turnToAngle(double goalAngle) {

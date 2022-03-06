@@ -1,6 +1,7 @@
 package frc.robot.wrappers;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation;
 
 public class JoystickWrapper extends Wrapper{
@@ -14,14 +15,16 @@ public class JoystickWrapper extends Wrapper{
             this.port = port;
             js = new Joystick(this.port);
             deadZone = 0.1;
+            isInitialized = true;
         }
         catch (RuntimeException ex ) {
-            DriverStation.reportError("Error Initiating CAN Spark Max:  " + ex.getMessage(), true);
+            DriverStation.reportError("Error Initiating Joystick:  " + ex.getMessage(), true);
         }
     }
 
     public double getRawAxis(int ID) {
         if (isInitialized) {
+            SmartDashboard.putNumber("Joystick"+ID, js.getRawAxis(ID));
             if (Math.abs(js.getRawAxis(ID)) < deadZone) {
                 return 0.0;
             }

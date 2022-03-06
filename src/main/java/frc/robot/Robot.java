@@ -63,23 +63,26 @@ public class Robot extends TimedRobot {
     SHOOT,
     GO_TO_HUMAN;
 
-    
+
   }
   private final SolenoidWrapper leftIntakeSolenoid;
   private final SolenoidWrapper rightIntakeSolenoid;
   private final SolenoidWrapper leftElevatorSolenoid;
   private final SolenoidWrapper rightElevatorSolenoid;
 
-  
+
   States state;
   private TalonSRXWrapper leftMotor;
   private TalonSRXWrapper leftMotor2;
   private TalonSRXWrapper rightMotor;
   private TalonSRXWrapper rightMotor2;
   private JoystickWrapper leftStick;
+  private JoystickWrapper rightStick;
   private XboxControllerWrapper xboxController;
   private double leftAxis;
   private double rightAxis;
+
+  //private CameraWrapper camera;
 
   private boolean depositButton;
   private boolean elevatorUpButton;
@@ -87,6 +90,7 @@ public class Robot extends TimedRobot {
   private boolean climbButton;
   private boolean dropBall;
   private boolean resetNavX;
+  private boolean speedReduceButton;
 
   //private NavX navx;
 
@@ -106,7 +110,7 @@ public class Robot extends TimedRobot {
   private TalonFXWrapper leftElevatorMotor; //to go up go clockwise
   private TalonFXWrapper rightElevatorMotor; //to go up go counter-clockwise
 
-  
+
 
 
 
@@ -116,12 +120,14 @@ public class Robot extends TimedRobot {
     super(0.03);
     //create variables
     leftStick = new JoystickWrapper(0);
+    rightStick = new JoystickWrapper(1);
     xboxController = new XboxControllerWrapper(0);
     //topCam = new Camera();
     //bottomCam = new Camera();
     //Ball = new Ball();
     state = States.MANUAL;
     swerveDrive = new SwerveDrive();
+    //camera = new CameraWrapper(true);
 
     //navx = new NavX();
 
@@ -151,9 +157,9 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     leftIntakeSolenoid.set(false);
     rightIntakeSolenoid.set(false);
-    
+
   }
-  
+
 
   @Override
   public void teleopPeriodic() {
@@ -162,10 +168,13 @@ public class Robot extends TimedRobot {
     double rAxis;
 
 
+    //SmartDashboard.putNumber("BallX", camera.getBallX());
+
 
     //SET CONTROLLER TYPE HERE
     //SET TO 0 FOR XBOX CONTROLLER
     //SET TO 1 FOR EVERYTHING ELSE
+
     controllerType = 0;
 
     //Controllers
@@ -179,22 +188,27 @@ public class Robot extends TimedRobot {
       elevatorDownButton = xboxController.getYButton();
       dropBall = xboxController.getRightBumper();
       resetNavX = xboxController.getStartButton();
+      speedReduceButton = (xboxController.getRightTriggerAxis() > 0.7);
+
     }
     else if (controllerType == 1) {
       xAxis = leftStick.getRawAxis(0);
       yAxis = leftStick.getRawAxis(1);
-      rAxis = leftStick.getRawAxis(3);
+      rAxis = rightStick.getRawAxis(0);
       depositButton = leftStick.getRawButton(0);
       elevatorUpButton = leftStick.getRawButton(1);
       climbButton = leftStick.getRawButton(2);
       elevatorDownButton = leftStick.getRawButton(3);
+      speedReduceButton = rightStick.getRawButton(7);
+      resetNavX = rightStick.getRawButton(4);
+
     }
     else {
       xAxis = 0;
       yAxis = 0;
       rAxis = 0;
     }
-    
+
     // Setting speed of depositor motors
     if (depositButton) {
       leftDepositorMotor.set(0.5);
@@ -223,6 +237,7 @@ public class Robot extends TimedRobot {
     }
     if (resetNavX) {
       swerveDrive.resetNavX();
+      swerveDrive.setEncoders();
     }
     //double distanceToBall = shark.getDistanceCentimeters();
     //SmartDashboard.putNumber("distanceToBall", distanceToBall);
@@ -231,7 +246,7 @@ public class Robot extends TimedRobot {
 
     /*
     double pov = leftStick.getPOV();
-    
+
     turnTo = (pov != -1) && (rAxis == 0);
 
     if (turnTo) {
@@ -241,191 +256,55 @@ public class Robot extends TimedRobot {
       }
     }
     */
-    
-    swerveDrive.drive(-(Math.abs(xAxis)*xAxis), Math.abs(yAxis)*yAxis, Math.abs(rAxis)*rAxis);
+    double x,y,r,speedReduce;
+    speedReduce = 1;
 
-    
+    if(speedReduceButton){
+      speedReduce = 0.25;
+    }
+    x = -(Math.abs(xAxis)*xAxis) * speedReduce;
+    y= Math.abs(yAxis)*yAxis * speedReduce;
+    r= Math.abs(rAxis)*rAxis * speedReduce;
 
-    /*
-    switch(state) {
-      case MANUAL:
-        manualControl();
-        break;
 
-      case AUTONOMOUS:
-        
-        //autonomousPeriodic();
-        state = States.DETECT_BALL;
-        break;
-      case DETECT_BALL:
-        detectBall();
-        break;
-      case GO_TO_HUMAN:
-        goToHuman();
-        break;
-      case MOVE_TO_BALL:
-        moveToBall();
-        break;
-      case PICK_UP_BALL:
-        pickUpBall();
-        break;
-      case GO_TO_HUB:
-        goToHub();
-        break;
-      case DROP_BALL:
-        dropBall();
-        break;
-    }*/
-  }
-  /*
-  public void manualControl() {
-    if (button1) {
-      leftMotor.set(0.3);
-      leftMotor2.set(0.3);
-      rightMotor.set(-0.3);
-      rightMotor2.set(-0.3);
-    }
-    else if (button2) {
-      leftMotor.set(-0.3);
-      leftMotor2.set(-0.3);
-      rightMotor.set(0.3);
-      rightMotor2.set(0.3);
-    }
-    else if (button3) {
-      leftMotor.set(0);
-      leftMotor2.set(0);
-      rightMotor.set(0);
-      rightMotor2.set(0);
-    }
-    if (leftAxis == -1) {
-      leftMotor.set(-0.1);
-      leftMotor2.set(-0.1);
-    } 
-    else if (leftAxis < -0.5) {
-      leftMotor.set(0.1);
-      leftMotor2.set(0.1);
-    }
-    else if (leftAxis > -0.5) {
-      leftMotor.set(0);
-      leftMotor.set(0);
-    }
-    else if (leftAxis == 1) {
-      rightMotor.set(0.1);
-      rightMotor2.set(0.1);
-    }
-    else if (leftAxis > 0.5) {
-      rightMotor.set(-0.1);
-      rightMotor2.set(-0.1);
-    }
-    else if (leftAxis > 0) {
-      rightMotor.set(0);
-      rightMotor2.set(0);
-    }
-    else if (leftAxis == 0) {
-      leftMotor.set(0.3);
-      leftMotor2.set(0.3);
-      rightMotor.set(-0.3);
-      rightMotor2.set(-0.3);
-    }
-  }*/
-  /*
-  public void detectBall() {
-
-    if (findBall()) {
-      state = States.MOVE_TO_BALL;
-    }
-    else {
-      state = States.GO_TO_HUMAN;
-    }
-  }
-  public void goToHuman() {
-    
-    
+    swerveDrive.drive(x, y, r, true);
   }
 
-  public void moveToBall() {
-    if (reachedBall()) {
-      state = States.PICK_UP_BALL;
-    }
-    else {
-      state = States.DETECT_BALL;
-    }
-  }
 
-  public void pickUpBall() {
-    if (ballPickedUp()) {
-      state = States.GO_TO_HUB;
-    }
-    else {
-      state = States.DETECT_BALL;
-    }
-  }
 
-  public void goToHub() {
-    if (reachedHub()) {
-      state = States.DROP_BALL;
-    }
-  }
-
-  public void dropBall() {
-    if (ballDropped()) {
-      state = States.DETECT_BALL;
-    }
-  }
-  int count = 0;
-  public boolean findBall(){
-    count += 1;
-    int turn = topCam.isBallPresent();
-    if (turn == 0) {
-      return true;
-    }
-    else if (turn > 0) {
-      swerveDrive.turn_right(0.1);
-    }
-    else {
-      swerveDrive.turn_left(0.1);
-    }
-    if (count > 1000) {
-      state = States.GO_TO_HUMAN;
-    }
-    return false;
-  }
- -= public boolean reachedBall(){
-    int distanceToBall;
-    if (distanceToBall == 0){
-      return true;
-    }
-    return false;
-  }
-  public boolean ballPickedUp(){
-    int pickedUp = bottomCam.isBallPresent();
-    if (pickedUp == 0){
-      return true;
-    }
-    return false;
-  }
-  public boolean reachedHub(){
-    int distanceToHub;
-    if (distanceToHub == 0) {
-      return true;
-    }
-    return false; 
-  }
-  public boolean ballDropped(){
-    boolean hasBall;
-    if (hasBall == false) {
-      return true;
-    }
-    return false;
-  }
-  */
-  
   @Override
   public void autonomousInit() {
-    
+  //   SmartDashboard.putNumber("FL angle", 0);
+  //   SmartDashboard.putNumber("FR angle", 0);
+  //   SmartDashboard.putNumber("BL angle", 0);
+  //   SmartDashboard.putNumber("BR angle", 0);
   }
 
   @Override
   public void autonomousPeriodic() {
+    // swerveDrive.frontLeft.printTalon();
+    // swerveDrive.frontRight.printTalon();
+    // swerveDrive.backLeft.printTalon();
+    // swerveDrive.backRight.printTalon();
+
+    // swerveDrive.frontLeft.drive(0.1, SmartDashboard.getNumber("FL angle", 0));
+    // swerveDrive.frontRight.drive(0.1, SmartDashboard.getNumber("FR angle", 0));
+    // swerveDrive.backLeft.drive(0.1, SmartDashboard.getNumber("BL angle", 0));
+    // swerveDrive.backRight.drive(0.1, SmartDashboard.getNumber("BR angle", 0));
+
+    // SmartDashboard.putNumber("BallX", camera.getBallX());
+    // if (Math.abs(camera.getBallX()) < 1) {
+    //   if (camera.getBallX() > .1) {
+    //     swerveDrive.drive(0, 0, -.1, false);
+    //   } else if (camera.getBallX() < -.1) {
+    //     swerveDrive.drive(0, 0, .1, false);
+    //   }
+    //   else {
+    //     swerveDrive.drive(0, -.1, 0, false);
+    //   }
+    // }
+    // else {
+    //   swerveDrive.drive(0, 0, 0, false);
+    // }
   }
-} 
+}
