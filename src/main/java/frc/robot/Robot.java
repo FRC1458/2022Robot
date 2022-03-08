@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -109,7 +110,10 @@ public class Robot extends TimedRobot {
   private TalonSRXWrapper rightDepositorMotor;
   private TalonFXWrapper leftElevatorMotor; //to go up go clockwise
   private TalonFXWrapper rightElevatorMotor; //to go up go counter-clockwise
-
+  
+  private DigitalInput bottomLimitSwitch;
+  private DigitalInput middleLimitSwitch;
+  private DigitalInput topLimitSwitch;
 
 
 
@@ -142,7 +146,10 @@ public class Robot extends TimedRobot {
     leftDepositorMotor = new TalonSRXWrapper(RobotConstants.leftDepositorMotorID);
     rightDepositorMotor = new TalonSRXWrapper(RobotConstants.rightDepositorMotorID);
     leftElevatorMotor = new TalonFXWrapper(RobotConstants.leftElevatorMotorID);
-    rightElevatorMotor =new TalonFXWrapper(RobotConstants.rightElevatorMotorID);
+    rightElevatorMotor = new TalonFXWrapper(RobotConstants.rightElevatorMotorID);
+    bottomLimitSwitch = new DigitalInput(0);
+    middleLimitSwitch = new DigitalInput(1);
+    topLimitSwitch = new DigitalInput(2);
   }
 
 
