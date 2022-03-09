@@ -331,4 +331,14 @@ public class Robot extends TimedRobot {
     ballCamera.endCamera();
   }
 
+  public void elevatorDepositer(boolean input) {
+    //Button to make elevator go up
+    //Button 
+    if (input) {
+      //elevator goes up
+    } else if (input == false) {
+      //elevator goes down
+    }
+  }
+
 }
