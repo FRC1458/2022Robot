@@ -94,14 +94,13 @@ public class Robot extends TimedRobot {
   private boolean resetNavX;
   private boolean speedReduceButton;
 
+  //sensors
   //private NavX navx;
-
-  //Camera topCam;
-  //Camera bottomCam;
   CameraWrapper ballCamera;
-  SwerveDrive swerveDrive;
-
   //Lasershark shark;
+  UltrasoundWrapper ultrasound;
+
+  SwerveDrive swerveDrive;
 
   //Set Controller Type
   int controllerType;
@@ -139,6 +138,8 @@ public class Robot extends TimedRobot {
     //navx = new NavX();
 
     //shark = new Lasershark(0);
+
+    ultrasound = new UltrasoundWrapper(0, 1);
 
     leftIntakeSolenoid = new SolenoidWrapper(RobotConstants.leftIntakeSolenoidID);
     rightIntakeSolenoid = new SolenoidWrapper(RobotConstants.rightIntakeSolenoidID);
@@ -334,15 +335,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    // swerveDrive.frontLeft.printTalon();
-    // swerveDrive.frontRight.printTalon();
-    // swerveDrive.backLeft.printTalon();
-    // swerveDrive.backRight.printTalon();
-
-    // swerveDrive.frontLeft.drive(0.1, SmartDashboard.getNumber("FL angle", 0));
-    // swerveDrive.frontRight.drive(0.1, SmartDashboard.getNumber("FR angle", 0));
-    // swerveDrive.backLeft.drive(0.1, SmartDashboard.getNumber("BL angle", 0));
-    // swerveDrive.backRight.drive(0.1, SmartDashboard.getNumber("BR angle", 0));
 
     SmartDashboard.putNumber("BallX", ballCamera.getBallX());
     if (Math.abs(ballCamera.getBallX()) < 1) {
@@ -358,6 +350,8 @@ public class Robot extends TimedRobot {
     else {
       swerveDrive.drive(0, 0, 0, false);
     }
+
+    
   }
 
   @Override
