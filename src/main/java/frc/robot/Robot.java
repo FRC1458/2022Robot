@@ -285,9 +285,36 @@ public class Robot extends TimedRobot {
     swerveDrive.drive(x, y, r, true);
   }
 
-  public void setMotorSpeed (double speed) {
+  public void bottomLimitToMiddleLimit (double speed) {
     if (speed > 0) {
       if (bottomLimitSwitch.get()) {
+        // Set Motor Speeds Accordingly
+      }
+      else {
+        // Set Motor Speeds Accordingly
+      }
+    }
+    else {
+      if (middleLimitSwitch.get()) {
+        // Set Motor Speeds Accordingly
+      }
+      else {
+        // Set Motor Speeds Accordingly
+      }
+    }
+  }
+
+  public void middleLimitToTopLimit (double speed) {
+    if (speed > 0) {
+      if (middleLimitSwitch.get()) {
+        // Set Motor Speeds Accordingly
+      }
+      else {
+        // Set Motor Speeds Accordingly
+      }
+    }
+    else {
+      if (topLimitSwitch.get()) {
         // Set Motor Speeds Accordingly
       }
       else {
