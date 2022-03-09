@@ -278,7 +278,11 @@ public class Robot extends TimedRobot {
     swerveDrive.drive(x, y, r, true);
   }
 
-
+  public void setMotorSpeed (double speed) {
+    if (speed > 0) {
+      
+    }
+  }
 
   @Override
   public void autonomousInit() {
