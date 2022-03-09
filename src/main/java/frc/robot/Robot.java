@@ -167,9 +167,7 @@ public class Robot extends TimedRobot {
     double yAxis;
     double rAxis;
 
-
     SmartDashboard.putNumber("BallX", ballCamera.getBallX());
-
 
     //SET CONTROLLER TYPE HERE
     //SET TO 0 FOR XBOX CONTROLLER
