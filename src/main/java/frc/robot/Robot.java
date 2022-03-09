@@ -280,7 +280,12 @@ public class Robot extends TimedRobot {
 
   public void setMotorSpeed (double speed) {
     if (speed > 0) {
-      
+      if (bottomLimitSwitch.get()) {
+        // Set Motor Speeds Accordingly
+      }
+      else {
+        // Set Motor Speeds Accordingly
+      }
     }
   }
 
