@@ -86,6 +86,7 @@ public class Robot extends TimedRobot {
   //private CameraWrapper camera;
 
   private boolean depositButton;
+  private boolean leftBumper;
   private boolean elevatorUpButton;
   private boolean elevatorDownButton;
   private boolean climbButton;
@@ -108,9 +109,11 @@ public class Robot extends TimedRobot {
   private TalonSRXWrapper intakeMotor;
   private TalonSRXWrapper leftDepositorMotor;
   private TalonSRXWrapper rightDepositorMotor;
+  private TalonSRXWrapper intakePulleyMotor;
   private TalonFXWrapper leftElevatorMotor; //to go up go clockwise
   private TalonFXWrapper rightElevatorMotor; //to go up go counter-clockwise
-  
+ 
+
   private DigitalInput bottomLimitSwitch;
   private DigitalInput middleLimitSwitch;
   private DigitalInput topLimitSwitch;
@@ -191,6 +194,7 @@ public class Robot extends TimedRobot {
       yAxis = xboxController.getLeftY();
       rAxis = xboxController.getRightX();
       depositButton = xboxController.getAButton();
+      PulleyButton = xboxController.getRightBumper();
       elevatorUpButton = xboxController.getBButton();
       climbButton = xboxController.getXButton();
       elevatorDownButton = xboxController.getYButton();
@@ -246,6 +250,9 @@ public class Robot extends TimedRobot {
     if (resetNavX) {
       swerveDrive.resetNavX();
       swerveDrive.setEncoders();
+    }
+    if (leftBumper) {
+
     }
     //double distanceToBall = shark.getDistanceCentimeters();
     //SmartDashboard.putNumber("distanceToBall", distanceToBall);
