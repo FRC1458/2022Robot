@@ -19,4 +19,3 @@ public class NavXWrapper extends Wrapper{
         if (isInitialized) navx.operatorControl();
     }
 }
-

@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -85,6 +86,7 @@ public class Robot extends TimedRobot {
   //private CameraWrapper camera;
 
   private boolean depositButton;
+  private boolean leftBumper;
   private boolean elevatorUpButton;
   private boolean elevatorDownButton;
   private boolean climbButton;
@@ -92,14 +94,13 @@ public class Robot extends TimedRobot {
   private boolean resetNavX;
   private boolean speedReduceButton;
 
+  //sensors
   //private NavX navx;
-
-  //Camera topCam;
-  //Camera bottomCam;
   CameraWrapper ballCamera;
-  SwerveDrive swerveDrive;
-
   //Lasershark shark;
+  UltrasoundWrapper ultrasound;
+
+  SwerveDrive swerveDrive;
 
   //Set Controller Type
   int controllerType;
@@ -107,9 +108,14 @@ public class Robot extends TimedRobot {
   private TalonSRXWrapper intakeMotor;
   private TalonSRXWrapper leftDepositorMotor;
   private TalonSRXWrapper rightDepositorMotor;
+  private TalonSRXWrapper intakePulleyMotor;
   private TalonFXWrapper leftElevatorMotor; //to go up go clockwise
   private TalonFXWrapper rightElevatorMotor; //to go up go counter-clockwise
+ 
 
+  private DigitalInput bottomLimitSwitch;
+  private DigitalInput middleLimitSwitch;
+  private DigitalInput topLimitSwitch;
 
 
 
@@ -133,6 +139,8 @@ public class Robot extends TimedRobot {
 
     //shark = new Lasershark(0);
 
+    ultrasound = new UltrasoundWrapper(0, 1);
+
     leftIntakeSolenoid = new SolenoidWrapper(RobotConstants.leftIntakeSolenoidID);
     rightIntakeSolenoid = new SolenoidWrapper(RobotConstants.rightIntakeSolenoidID);
     leftElevatorSolenoid = new SolenoidWrapper(RobotConstants.leftElevatorSolenoidID);
@@ -142,7 +150,10 @@ public class Robot extends TimedRobot {
     leftDepositorMotor = new TalonSRXWrapper(RobotConstants.leftDepositorMotorID);
     rightDepositorMotor = new TalonSRXWrapper(RobotConstants.rightDepositorMotorID);
     leftElevatorMotor = new TalonFXWrapper(RobotConstants.leftElevatorMotorID);
-    rightElevatorMotor =new TalonFXWrapper(RobotConstants.rightElevatorMotorID);
+    rightElevatorMotor = new TalonFXWrapper(RobotConstants.rightElevatorMotorID);
+    bottomLimitSwitch = new DigitalInput(0);
+    middleLimitSwitch = new DigitalInput(1);
+    topLimitSwitch = new DigitalInput(2);
   }
 
 
@@ -155,6 +166,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    ballCamera = new CameraWrapper(true);
     leftIntakeSolenoid.set(false);
     rightIntakeSolenoid.set(false);
 
@@ -181,6 +193,7 @@ public class Robot extends TimedRobot {
       yAxis = xboxController.getLeftY();
       rAxis = xboxController.getRightX();
       depositButton = xboxController.getAButton();
+      PulleyButton = xboxController.getRightBumper();
       elevatorUpButton = xboxController.getBButton();
       climbButton = xboxController.getXButton();
       elevatorDownButton = xboxController.getYButton();
@@ -237,6 +250,9 @@ public class Robot extends TimedRobot {
       swerveDrive.resetNavX();
       swerveDrive.setEncoders();
     }
+    if (leftBumper) {
+
+    }
     //double distanceToBall = shark.getDistanceCentimeters();
     //SmartDashboard.putNumber("distanceToBall", distanceToBall);
 
@@ -268,10 +284,47 @@ public class Robot extends TimedRobot {
     swerveDrive.drive(x, y, r, true);
   }
 
+  public void bottomLimitToMiddleLimit (double speed) {
+    if (speed > 0) {
+      if (bottomLimitSwitch.get()) {
+        // Set Motor Speeds Accordingly
+      }
+      else {
+        // Set Motor Speeds Accordingly
+      }
+    }
+    else {
+      if (middleLimitSwitch.get()) {
+        // Set Motor Speeds Accordingly
+      }
+      else {
+        // Set Motor Speeds Accordingly
+      }
+    }
+  }
 
+  public void middleLimitToTopLimit (double speed) {
+    if (speed > 0) {
+      if (middleLimitSwitch.get()) {
+        // Set Motor Speeds Accordingly
+      }
+      else {
+        // Set Motor Speeds Accordingly
+      }
+    }
+    else {
+      if (topLimitSwitch.get()) {
+        // Set Motor Speeds Accordingly
+      }
+      else {
+        // Set Motor Speeds Accordingly
+      }
+    }
+  }
 
   @Override
   public void autonomousInit() {
+    ballCamera = new CameraWrapper(true);
   //   SmartDashboard.putNumber("FL angle", 0);
   //   SmartDashboard.putNumber("FR angle", 0);
   //   SmartDashboard.putNumber("BL angle", 0);
@@ -280,15 +333,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    // swerveDrive.frontLeft.printTalon();
-    // swerveDrive.frontRight.printTalon();
-    // swerveDrive.backLeft.printTalon();
-    // swerveDrive.backRight.printTalon();
-
-    // swerveDrive.frontLeft.drive(0.1, SmartDashboard.getNumber("FL angle", 0));
-    // swerveDrive.frontRight.drive(0.1, SmartDashboard.getNumber("FR angle", 0));
-    // swerveDrive.backLeft.drive(0.1, SmartDashboard.getNumber("BL angle", 0));
-    // swerveDrive.backRight.drive(0.1, SmartDashboard.getNumber("BR angle", 0));
 
     SmartDashboard.putNumber("BallX", ballCamera.getBallX());
     if (Math.abs(ballCamera.getBallX()) < 1) {
@@ -304,5 +348,28 @@ public class Robot extends TimedRobot {
     else {
       swerveDrive.drive(0, 0, 0, false);
     }
+
+    
   }
+
+  @Override
+  public void teleopExit() {
+    ballCamera.endCamera();
+  }
+  
+  @Override
+  public void autonomousExit() {
+    ballCamera.endCamera();
+  }
+
+  public void elevatorDepositer(boolean input) {
+    //Button to make elevator go up
+    //Button 
+    if (input) {
+      //elevator goes up
+    } else if (input == false) {
+      //elevator goes down
+    }
+  }
+
 }
