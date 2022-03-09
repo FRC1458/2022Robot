@@ -97,4 +97,9 @@ public class XboxControllerWrapper extends Wrapper{
         if (isInitialized) return xbox.getStartButton();
         return false;
     }
+    public boolean getLeftButton() {
+        if (isInitialized) return xbox.getLeftButton();
+        return false;
+    }
+    
 }
