@@ -93,6 +93,7 @@ public class Robot extends TimedRobot {
   private boolean dropBall;
   private boolean resetNavX;
   private boolean speedReduceButton;
+  private boolean pulleyButton;
 
   //sensors
   //private NavX navx;
@@ -151,9 +152,9 @@ public class Robot extends TimedRobot {
     rightDepositorMotor = new TalonSRXWrapper(RobotConstants.rightDepositorMotorID);
     leftElevatorMotor = new TalonFXWrapper(RobotConstants.leftElevatorMotorID);
     rightElevatorMotor = new TalonFXWrapper(RobotConstants.rightElevatorMotorID);
-    bottomLimitSwitch = new DigitalInput(0);
-    middleLimitSwitch = new DigitalInput(1);
-    topLimitSwitch = new DigitalInput(2);
+    bottomLimitSwitch = new DigitalInput(RobotConstants.bottomLimitSwitchID);
+    middleLimitSwitch = new DigitalInput(RobotConstants.middleLimitSwitchID);
+    topLimitSwitch = new DigitalInput(RobotConstants.topLimitSwitchID);
   }
 
 
@@ -193,7 +194,7 @@ public class Robot extends TimedRobot {
       yAxis = xboxController.getLeftY();
       rAxis = xboxController.getRightX();
       depositButton = xboxController.getAButton();
-      PulleyButton = xboxController.getRightBumper();
+      pulleyButton = xboxController.getRightBumper();
       elevatorUpButton = xboxController.getBButton();
       climbButton = xboxController.getXButton();
       elevatorDownButton = xboxController.getYButton();
