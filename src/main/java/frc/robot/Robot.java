@@ -94,10 +94,9 @@ public class Robot extends TimedRobot {
   private boolean resetNavX;
   private boolean speedReduceButton;
   private boolean pulleyButton;
-  private boolean pulleyInUse = false;
-  private int counter = 0;
+  private boolean PulleyInUse;
+  private int counter;
 
-  
   //sensors
   //private NavX navx;
   CameraWrapper ballCamera;
@@ -121,7 +120,8 @@ public class Robot extends TimedRobot {
   private DigitalInput middleLimitSwitch;
   private DigitalInput topLimitSwitch;
 
-  
+
+
 
   boolean turnTo = false;
 
@@ -255,16 +255,16 @@ public class Robot extends TimedRobot {
     }
     if (pulleyButton){
       intakePulleyMotor.set(0.5);
-      pulleyInUse = true;
+      PulleyInUse = true;
     }
 
-    if (pulleyInUse == true) {
+    if (PulleyInUse = true) {
       counter = counter + 1;
     }
 
     if (counter == 10) {
       intakePulleyMotor.set(0);
-      pulleyInUse = false;
+      PulleyInUse = false;
     }
     //double distanceToBall = shark.getDistanceCentimeters();
     //SmartDashboard.putNumber("distanceToBall", distanceToBall);
@@ -299,19 +299,15 @@ public class Robot extends TimedRobot {
 
   public void bottomLimitToMiddleLimit (double speed) {
     if (speed > 0) {
-      if (bottomLimitSwitch.get()) {
-        elevatorDepositor(true);
-      }
-      else {
-          // Set Motor Speeds Accordingly
+      if (middleLimitSwitch.get()) {
+        leftElevatorMotor.set(0);
+        rightElevatorMotor.set(0);
       }
     }
     else {
-      if (middleLimitSwitch.get()) {
-        // Set Motor Speeds Accordingly
-      }
-      else {
-        // Set Motor Speeds Accordingly
+      if (bottomLimitSwitch.get()) {
+        leftElevatorMotor.set(0);
+        rightElevatorMotor.set(0);
       }
     }
   }
@@ -319,18 +315,14 @@ public class Robot extends TimedRobot {
   public void middleLimitToTopLimit (double speed) {
     if (speed > 0) {
       if (middleLimitSwitch.get()) {
-        // Set Motor Speeds Accordingly
-      }
-      else {
-        // Set Motor Speeds Accordingly
+        leftElevatorMotor.set(0);
+        rightElevatorMotor.set(0);
       }
     }
     else {
       if (topLimitSwitch.get()) {
-        // Set Motor Speeds Accordingly
-      }
-      else {
-        // Set Motor Speeds Accordingly
+        leftElevatorMotor.set(0);
+        rightElevatorMotor.set(0);
       }
     }
   }
