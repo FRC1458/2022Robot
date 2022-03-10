@@ -94,9 +94,10 @@ public class Robot extends TimedRobot {
   private boolean resetNavX;
   private boolean speedReduceButton;
   private boolean pulleyButton;
-  private boolean PulleyInUse;
-  private int counter;
+  private boolean pulleyInUse = false;
+  private int counter = 0;
 
+  
   //sensors
   //private NavX navx;
   CameraWrapper ballCamera;
@@ -120,8 +121,7 @@ public class Robot extends TimedRobot {
   private DigitalInput middleLimitSwitch;
   private DigitalInput topLimitSwitch;
 
-
-
+  
 
   boolean turnTo = false;
 
@@ -255,16 +255,16 @@ public class Robot extends TimedRobot {
     }
     if (pulleyButton){
       intakePulleyMotor.set(0.5);
-      PulleyInUse = true;
+      pulleyInUse = true;
     }
 
-    if (PulleyInUse = true) {
+    if (pulleyInUse == true) {
       counter = counter + 1;
     }
 
     if (counter == 10) {
       intakePulleyMotor.set(0);
-      PulleyInUse = false;
+      pulleyInUse = false;
     }
     //double distanceToBall = shark.getDistanceCentimeters();
     //SmartDashboard.putNumber("distanceToBall", distanceToBall);
