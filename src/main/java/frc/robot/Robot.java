@@ -282,7 +282,6 @@ public class Robot extends TimedRobot {
         turnTo = false;
       }
     }
-    
     */
     double x,y,r,speedReduce;
     speedReduce = 1;
@@ -302,7 +301,6 @@ public class Robot extends TimedRobot {
     if (speed > 0) {
       if (bottomLimitSwitch.get()) {
         // Set Motor Speeds Accordingly
-        
       }
       else {
         // Set Motor Speeds Accordingly
@@ -378,14 +376,15 @@ public class Robot extends TimedRobot {
   }
 
   public void elevatorDepositer(boolean input) {
-    //Button to make elevator go up and down (has to stop when the middle limit switch is activated)
-    if (input) { //If true, go up
-      leftElevatorMotor.set(1);
-      rightElevatorMotor.set(-1);
-    } else if (input == false) { //If false, go down
-      leftElevatorMotor.set(-1);
-      rightElevatorMotor.set(1);
+    //Button to make elevator go up
+    //Button 
+    if (input) {
+      //elevator goes up
+    } else if (input == false) {
+      //elevator goes down
     }
   }
 
 }
+
+//THE GAME
