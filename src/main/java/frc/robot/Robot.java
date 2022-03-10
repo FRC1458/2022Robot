@@ -83,6 +83,8 @@ public class Robot extends TimedRobot {
   private double leftAxis;
   private double rightAxis;
 
+  private double elevatorSpeed;
+
   //private CameraWrapper camera;
 
   private boolean depositButton;
@@ -95,7 +97,15 @@ public class Robot extends TimedRobot {
   private boolean speedReduceButton;
   private boolean pulleyButton;
   private boolean PulleyInUse;
+  private boolean elevatorDepositButton;
+  private boolean elevatorClimbButton;
+  private boolean depositor;
+  private boolean climb;
+  private boolean depositorBool;
+  private boolean climbBool;
+  private boolean climbCounterBool;
   private int counter;
+  private int climbCounter;
 
   //sensors
   //private NavX navx;
@@ -182,6 +192,37 @@ public class Robot extends TimedRobot {
     double yAxis;
     double rAxis;
 
+  if (elevatorDepositButton && !depositorBool) {
+    moveElevator(1);
+    depositor = true;
+    depositorBool = true;
+  } else if (elevatorDepositButton && depositorBool) {
+    moveElevator(-1);
+    depositor = true;
+    depositorBool = false;
+  }
+  if (elevatorClimbButton && !climbBool) {
+    moveElevator(1);
+    climb = true;
+    climbBool = true;
+  } else if (elevatorClimbButton && climbBool) {
+    moveElevator(-1);
+    climb = true;
+    climbBool = false;
+  }
+  if (depositor) {
+    bottomLimitToMiddleLimit(elevatorSpeed);
+  } else if (climb) {
+    middleLimitToTopLimit(elevatorSpeed);
+  }
+
+  if (climbCounterBool) {
+    counter++;
+  }
+  if (counter == 500) {
+    moveElevator(0);
+  }
+
     SmartDashboard.putNumber("BallX", ballCamera.getBallX());
 
     //SET CONTROLLER TYPE HERE
@@ -197,9 +238,9 @@ public class Robot extends TimedRobot {
       rAxis = xboxController.getRightX();
       depositButton = xboxController.getAButton();
       pulleyButton = xboxController.getRightBumper();
-      elevatorUpButton = xboxController.getBButton();
+      elevatorDepositButton = xboxController.getBButton();
       climbButton = xboxController.getXButton();
-      elevatorDownButton = xboxController.getYButton();
+      elevatorClimbButton = xboxController.getYButton();
       dropBall = xboxController.getRightBumper();
       resetNavX = xboxController.getStartButton();
       speedReduceButton = (xboxController.getRightTriggerAxis() > 0.7);
@@ -299,30 +340,26 @@ public class Robot extends TimedRobot {
 
   public void bottomLimitToMiddleLimit (double speed) {
     if (speed > 0) {
-      if (middleLimitSwitch.get()) {
-        leftElevatorMotor.set(0);
-        rightElevatorMotor.set(0);
+      if (!middleLimitSwitch.get()) {
+        moveElevator(0);
       }
     }
     else {
-      if (bottomLimitSwitch.get()) {
-        leftElevatorMotor.set(0);
-        rightElevatorMotor.set(0);
+      if (!bottomLimitSwitch.get()) {
+        moveElevator(0);
       }
     }
   }
 
   public void middleLimitToTopLimit (double speed) {
     if (speed > 0) {
-      if (middleLimitSwitch.get()) {
-        leftElevatorMotor.set(0);
-        rightElevatorMotor.set(0);
+      if (!middleLimitSwitch.get()) {
+        moveElevator(0);
       }
     }
     else {
-      if (topLimitSwitch.get()) {
-        leftElevatorMotor.set(0);
-        rightElevatorMotor.set(0);
+      if (!topLimitSwitch.get()) {
+        moveElevator(0);
       }
     }
   }
@@ -356,6 +393,7 @@ public class Robot extends TimedRobot {
 
     
   }
+  
 
   @Override
   public void teleopExit() {
@@ -367,15 +405,19 @@ public class Robot extends TimedRobot {
     ballCamera.endCamera();
   }
 
-  public void elevatorDepositor(boolean input) {
-    //Button to make elevator go up
-    //Button 
-    if (input) {
+  public void moveElevator(int input) {
+    if (input == 1) {
       leftElevatorMotor.set(1);
       rightElevatorMotor.set(-1);
-    } else if (input == false) {
+      elevatorSpeed = 1;
+    } else if (input == -1) {
       leftElevatorMotor.set(-1);
       rightElevatorMotor.set(1);
+      elevatorSpeed = -1;
+    } else if (input == 0) {
+      leftElevatorMotor.set(0);
+      rightElevatorMotor.set(0);
+      elevatorSpeed = 0;
     }
   }
 
