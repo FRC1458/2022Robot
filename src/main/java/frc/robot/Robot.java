@@ -379,11 +379,12 @@ public class Robot extends TimedRobot {
     //Button to make elevator go up
     //Button 
     if (input) {
-      //elevator goes up
+      leftElevatorMotor.set(1);
+      rightElevatorMotor.set(-1);
     } else if (input == false) {
-      //elevator goes down
+      leftElevatorMotor.set(-1);
+      rightElevatorMotor.set(1);
     }
   }
 
 }
-// Game
