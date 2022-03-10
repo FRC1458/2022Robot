@@ -1,6 +1,6 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project. (THE GAME)
+// the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
 
@@ -86,7 +86,7 @@ public class Robot extends TimedRobot {
   //private CameraWrapper camera;
 
   private boolean depositButton;
-  private boolean leftBumper;
+  private boolean IntakePulleyButton;
   private boolean elevatorUpButton;
   private boolean elevatorDownButton;
   private boolean climbButton;
@@ -94,6 +94,8 @@ public class Robot extends TimedRobot {
   private boolean resetNavX;
   private boolean speedReduceButton;
   private boolean pulleyButton;
+  private boolean PulleyInUse;
+  private int counter;
 
   //sensors
   //private NavX navx;
@@ -251,8 +253,18 @@ public class Robot extends TimedRobot {
       swerveDrive.resetNavX();
       swerveDrive.setEncoders();
     }
-    if (leftBumper) {
+    if (pulleyButton){
+      intakePulleyMotor.set(0.5);
+      PulleyInUse = true;
+    }
 
+    if (PulleyInUse = true) {
+      counter = counter + 1;
+    }
+
+    if (counter == 10) {
+      intakePulleyMotor.set(0);
+      PulleyInUse = false;
     }
     //double distanceToBall = shark.getDistanceCentimeters();
     //SmartDashboard.putNumber("distanceToBall", distanceToBall);
@@ -374,3 +386,5 @@ public class Robot extends TimedRobot {
   }
 
 }
+
+//THE GAME
