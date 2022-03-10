@@ -288,10 +288,10 @@ public class Robot extends TimedRobot {
   public void bottomLimitToMiddleLimit (double speed) {
     if (speed > 0) {
       if (bottomLimitSwitch.get()) {
-        // Set Motor Speeds Accordingly
+        elevatorDepositor(true);
       }
       else {
-        // Set Motor Speeds Accordingly
+          // Set Motor Speeds Accordingly
       }
     }
     else {
@@ -363,7 +363,7 @@ public class Robot extends TimedRobot {
     ballCamera.endCamera();
   }
 
-  public void elevatorDepositer(boolean input) {
+  public void elevatorDepositor(boolean input) {
     //Button to make elevator go up
     //Button 
     if (input) {
