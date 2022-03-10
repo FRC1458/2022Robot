@@ -52,4 +52,9 @@ public class RobotConstants {
     public final static int rightIntakeSolenoidID =0;
     public final static int leftElevatorSolenoidID=0;
     public final static int rightElevatorSolenoidID=0;
+
+    public final static int bottomLimitSwitchID = 0;
+    public final static int middleLimitSwitchID = 1;
+    public final static int topLimitSwitchID = 2;
+
 }

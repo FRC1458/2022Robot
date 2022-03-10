@@ -29,8 +29,10 @@ public class Wheel{
     private double speed;
     private double goalAngle;
 
-    private String wheelName;
+    public final String wheelName;
     private double offset;
+
+    private boolean diagnostic;
 
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
 
@@ -124,7 +126,7 @@ public class Wheel{
 
         // rotations = SmartDashboard.getNumber("Rotations", 0);
 
-        if (speed != 0){
+        if (speed != 0 || diagnostic){
             pidController.setReference(realGoalRotations, CANSparkMax.ControlType.kPosition);
         }
         speedMotor.set(speed);
@@ -142,5 +144,11 @@ public class Wheel{
 
     public double getAbsoluteEncoderValue() {
         return ((absoluteEncoder.getSelectedSensorPosition(0) % 4096)*RobotConstants.swerveDriveGearRatio/4096.0);
+    }
+
+    public double angleMotorDiagnostic() {
+        diagnostic = true;
+        this.drive(0, (encoder.getPosition() * (360 / RobotConstants.swerveDriveGearRatio)) + 720);
+        return (offset + getAbsoluteEncoderValue()) * (360/RobotConstants.swerveDriveGearRatio) - (encoder.getPosition() * (360 / RobotConstants.swerveDriveGearRatio));
     }
 }
