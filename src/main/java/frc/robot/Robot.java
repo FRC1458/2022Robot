@@ -154,10 +154,10 @@ public class Robot extends TimedRobot {
 
     ultrasound = new UltrasoundWrapper(0, 1);
 
-    leftIntakeSolenoid = new SolenoidWrapper(RobotConstants.leftIntakeSolenoidID);
-    rightIntakeSolenoid = new SolenoidWrapper(RobotConstants.rightIntakeSolenoidID);
-    leftElevatorSolenoid = new SolenoidWrapper(RobotConstants.leftElevatorSolenoidID);
-    rightElevatorSolenoid = new SolenoidWrapper(RobotConstants.rightElevatorSolenoidID);
+    leftIntakeSolenoid = new SolenoidWrapper(RobotConstants.leftIntakeSolenoidForwardID, RobotConstants.leftIntakeSolenoidReverseID);
+    rightIntakeSolenoid = new SolenoidWrapper(RobotConstants.rightIntakeSolenoidForwardID, RobotConstants.rightIntakeSolenoidReverseID);
+    leftElevatorSolenoid = new SolenoidWrapper(RobotConstants.leftElevatorSolenoidForwardID, RobotConstants.leftElevatorSolenoidReverseID);
+    rightElevatorSolenoid = new SolenoidWrapper(RobotConstants.rightElevatorSolenoidForwardID, RobotConstants.rightElevatorSolenoidReverseID);
 
     intakeMotor = new TalonSRXWrapper(RobotConstants.intakeMotorID);
     leftDepositorMotor = new TalonSRXWrapper(RobotConstants.leftDepositorMotorID);

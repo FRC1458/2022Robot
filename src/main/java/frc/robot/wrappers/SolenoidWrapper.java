@@ -1,16 +1,18 @@
 package frc.robot.wrappers;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 
 
 public class SolenoidWrapper extends Wrapper {
-    Solenoid solenoid;
+    DoubleSolenoid solenoid;
 
-    public SolenoidWrapper(int id) {
+    public SolenoidWrapper(int forwardID, int reverseID) {
         try{
-            solenoid = new Solenoid(PneumaticsModuleType.REVPH, id);
+            solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, forwardID, reverseID);
             isInitialized = true;
         }
         catch (RuntimeException ex ) {
@@ -19,6 +21,10 @@ public class SolenoidWrapper extends Wrapper {
     }
 
     public void set(boolean mode) {
-        if (isInitialized) solenoid.set(mode);
+        if (isInitialized) {
+            if (mode) solenoid.set(Value.kForward);
+
+            else solenoid.set(Value.kReverse);
+        }
     }
 }

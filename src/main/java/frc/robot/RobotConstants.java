@@ -48,10 +48,14 @@ public class RobotConstants {
     public final static int leftDepositorMotorID =3;
     public final static int rightDepositorMotorID=4;
 
-    public final static int leftIntakeSolenoidID =0;
-    public final static int rightIntakeSolenoidID =0;
-    public final static int leftElevatorSolenoidID=0;
-    public final static int rightElevatorSolenoidID=0;
+    public final static int leftIntakeSolenoidForwardID = 0;
+    public final static int leftIntakeSolenoidReverseID = 0;
+    public final static int rightIntakeSolenoidForwardID = 0;
+    public final static int rightIntakeSolenoidReverseID = 0;
+    public final static int leftElevatorSolenoidForwardID = 0;
+    public final static int leftElevatorSolenoidReverseID = 0;
+    public final static int rightElevatorSolenoidForwardID = 0;
+    public final static int rightElevatorSolenoidReverseID = 0;
 
     public final static int bottomLimitSwitchID = 0;
     public final static int middleLimitSwitchID = 1;
