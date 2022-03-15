@@ -66,6 +66,8 @@ public class Robot extends TimedRobot {
 
 
   }
+
+  private CompressorWrapper compressor;
   private final SolenoidWrapper leftIntakeSolenoid;
   private final SolenoidWrapper rightIntakeSolenoid;
   private final SolenoidWrapper leftElevatorSolenoid;
@@ -154,6 +156,8 @@ public class Robot extends TimedRobot {
 
     ultrasound = new UltrasoundWrapper(0, 1);
 
+    compressor = new CompressorWrapper();
+
     leftIntakeSolenoid = new SolenoidWrapper(RobotConstants.leftIntakeSolenoidForwardID, RobotConstants.leftIntakeSolenoidReverseID);
     rightIntakeSolenoid = new SolenoidWrapper(RobotConstants.rightIntakeSolenoidForwardID, RobotConstants.rightIntakeSolenoidReverseID);
     leftElevatorSolenoid = new SolenoidWrapper(RobotConstants.leftElevatorSolenoidForwardID, RobotConstants.leftElevatorSolenoidReverseID);
@@ -173,6 +177,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     //set to defaults
+    compressor.enableDigital();
     autonomousInit();
     swerveDrive.setEncoders();
   }
