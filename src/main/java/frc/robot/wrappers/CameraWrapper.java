@@ -1,7 +1,7 @@
 package frc.robot.wrappers;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.Camera;
+import frc.robot.Vision.Camera;
 
 public class CameraWrapper extends Wrapper{
     
