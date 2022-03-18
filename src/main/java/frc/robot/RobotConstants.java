@@ -12,9 +12,9 @@ public class RobotConstants {
     public final static int backRightSpeedID = 7;
     
     public final static int frontLeftAbsoluteEncoderID = 29;
-    public final static int frontRightAbsoluteEncoderID = 26;
-    public final static int backLeftAbsoluteEncoderID = 28;
-    public final static int backRightAbsoluteEncoderID = 27;
+    public final static int frontRightAbsoluteEncoderID = 28;
+    public final static int backLeftAbsoluteEncoderID = 27;
+    public final static int backRightAbsoluteEncoderID = 23;
     
     public final static double frontLeftAngleOffset = -5;
     public final static double frontRightAngleOffset = 4.4;
@@ -42,8 +42,8 @@ public class RobotConstants {
 
     public final static double swerveDriveGearRatio = 12.8;
 
-    public final static int intakeMotorID = 0;
-    public final static int rightElevatorMotorID =1;
+    public final static int intakeMotorID = 29;
+    public final static int rightElevatorMotorID =36;
     public final static int leftElevatorMotorID = 2;
     public final static int leftDepositorMotorID =3;
     public final static int rightDepositorMotorID=4;
