@@ -11,12 +11,12 @@ public class UltrasoundWrapper extends Wrapper{
     public UltrasoundWrapper(int output, int input) {
         try {
             ultrasound = new Ultrasonic(output, input);
-            Ultrasonic.setAutomaticMode(true);
             isInitialized = true;
         }
         catch (RuntimeException ex ) {
             DriverStation.reportError("Error Initiating Ultrasound:  " + ex.getMessage(), true);
         }
+        if (isInitialized) Ultrasonic.setAutomaticMode(true);
     }
 
     public double getRangeInches() {

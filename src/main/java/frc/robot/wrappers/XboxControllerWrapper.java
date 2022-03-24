@@ -102,5 +102,13 @@ public class XboxControllerWrapper extends Wrapper{
         if (isInitialized) return xbox.getLeftBumper();
         return false;
     }
+    public int getPOV() {
+        if (isInitialized) return xbox.getPOV();
+        return -1;
+    }
+    public boolean getRawButton(int button) {
+        if (isInitialized) return xbox.getRawButton(button);
+        return false;
+    }
     
 }
