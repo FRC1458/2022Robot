@@ -27,4 +27,9 @@ public class SolenoidWrapper extends Wrapper {
             else solenoid.set(Value.kReverse);
         }
     }
+
+    public boolean get() {
+        if (isInitialized) return solenoid.get() == Value.kForward;
+        return false;
+    }
 }

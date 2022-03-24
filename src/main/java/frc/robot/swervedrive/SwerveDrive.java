@@ -52,7 +52,7 @@ public class SwerveDrive {
         speeds.omegaRadiansPerSecond = r;
 
         if (fieldOriented) {
-            speeds = ChassisSpeeds.fromFieldRelativeSpeeds(x, y, r, Rotation2d.fromDegrees(-ahrs.getPitch()));
+            speeds = ChassisSpeeds.fromFieldRelativeSpeeds(x, y, r, Rotation2d.fromDegrees(-ahrs.getYaw()));
         }
         SmartDashboard.putNumber("angle from navx", ahrs.getYaw());
 
