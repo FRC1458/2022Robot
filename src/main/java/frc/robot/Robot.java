@@ -113,6 +113,10 @@ public class Robot extends TimedRobot {
   private boolean climbBool;
   private boolean climbCounterBool;
 
+  private boolean intakeButton;
+  private boolean intakeReverseButton;
+  private boolean intakeForwardButton;
+
   private boolean intakeSolenoidButton;
   private boolean elevSolenoidEngageButton;
   private boolean elevSolenoidDisengageButton;
@@ -139,9 +143,9 @@ public class Robot extends TimedRobot {
   //Set Controller Type
   int controllerType;
 
-  // private TalonSRXWrapper intakeMotor;
-  // private TalonSRXWrapper leftDepositorMotor;
-  // private TalonSRXWrapper rightDepositorMotor;
+  private TalonSRXWrapper intakeMotor;
+  private TalonSRXWrapper leftDepositorMotor;
+  private TalonSRXWrapper rightDepositorMotor;
   // private TalonSRXWrapper intakePulleyMotor;
   private TalonFXWrapper leftElevatorMotor; //to go up go clockwise
   private TalonFXWrapper rightElevatorMotor; //to go up go counter-clockwise
@@ -180,14 +184,14 @@ public class Robot extends TimedRobot {
     intakeSolenoid = new SolenoidWrapper(RobotConstants.intakeSolenoidForwardID, RobotConstants.intakeSolenoidReverseID);
     elevatorSolenoid = new SolenoidWrapper(RobotConstants.elevatorSolenoidForwardID, RobotConstants.elevatorSolenoidReverseID);
     
-    // intakeMotor = new TalonSRXWrapper(RobotConstants.intakeMotorID);
-    // leftDepositorMotor = new TalonSRXWrapper(RobotConstants.leftDepositorMotorID);
-    // rightDepositorMotor = new TalonSRXWrapper(RobotConstants.rightDepositorMotorID);
+    intakeMotor = new TalonSRXWrapper(RobotConstants.intakeMotorID);
+    leftDepositorMotor = new TalonSRXWrapper(RobotConstants.leftDepositorMotorID);
+    rightDepositorMotor = new TalonSRXWrapper(RobotConstants.rightDepositorMotorID);
     leftElevatorMotor = new TalonFXWrapper(RobotConstants.leftElevatorMotorID);
     rightElevatorMotor = new TalonFXWrapper(RobotConstants.rightElevatorMotorID);
-    // bottomLimitSwitch = new DigitalInput(RobotConstants.bottomLimitSwitchID);
-    // middleLimitSwitch = new DigitalInput(RobotConstants.middleLimitSwitchID);
-    // topLimitSwitch = new DigitalInput(RobotConstants.topLimitSwitchID);
+    bottomLimitSwitch = new DigitalInput(RobotConstants.bottomLimitSwitchID);
+    middleLimitSwitch = new DigitalInput(RobotConstants.middleLimitSwitchID);
+    topLimitSwitch = new DigitalInput(RobotConstants.topLimitSwitchID);
   }
 
 
@@ -196,7 +200,7 @@ public class Robot extends TimedRobot {
     //set to defaults
     compressor.enableDigital();
     autonomousInit();
-    //swerveDrive.setEncoders();
+    swerveDrive.setEncoders();
     intakeSolenoid.set(true);
 
     elevatorState = ElevatorStates.STAY;
@@ -263,17 +267,24 @@ public class Robot extends TimedRobot {
       yAxis = xboxController.getLeftY();
       rAxis = xboxController.getRightX();
       //depositButton = xboxController.getAButton();
-      pulleyButton = xboxController.getRightBumper();
+      //pulleyButton = xboxController.getRightBumper();
       //elevatorDepositButton = xboxController.getBButton();
       //climbButton = xboxController.getXButton();
       //elevatorClimbButton = xboxController.getYButton();
-      dropBall = xboxController.getRightBumper();
+      intakeButton = xboxController.getLeftBumper() && !xboxController.getRightBumper();
+      intakeReverseButton = (xboxController.getPOV() == 90);
+      intakeForwardButton = (xboxController.getPOV() == 270);
+      
+      depositButton = xboxController.getRightBumper() && !xboxController.getLeftBumper();
+
+      // dropBall = xboxController.getRightBumper();
       resetNavX = xboxController.getStartButton();
-      speedReduceButton = (xboxController.getRightTriggerAxis() > 0.7);
+      speedReduceButton = xboxController.getAButton();
 
       elevTop = (xboxController.getPOV() == 0) && xboxController.getStartButton() && xboxController.getLeftBumper();
       elevMiddle = (xboxController.getPOV() == 0);
       elevBottom = (xboxController.getPOV() == 180);
+      
 
       elevSolenoidEngageButton = xboxController.getXButton();
       elevSolenoidDisengageButton = xboxController.getYButton();
@@ -297,6 +308,10 @@ public class Robot extends TimedRobot {
       yAxis = 0;
       rAxis = 0;
     }
+
+    if (elevTop) elevatorState = ElevatorStates.TOP;
+    else if (elevMiddle) elevatorState = ElevatorStates.MIDDLE;
+    else if (elevBottom) elevatorState = ElevatorStates.BOTTOM;
 
     //setting elvator position
     // if (elevTop && topLimitSwitch.get()) {
@@ -350,7 +365,10 @@ public class Robot extends TimedRobot {
       elevatorSolenoid.set(false);
       engagedElevator = false;
     }
+
     if (engagedElevator) {
+      
+      // ethan comment this out when limit switches are working
       if (xboxController.getPOV() == 270) {
         leftElevatorMotor.set(xboxController.getLeftTriggerAxis()/4 - xboxController.getRightTriggerAxis()/4);
       }
@@ -369,24 +387,46 @@ public class Robot extends TimedRobot {
         leftElevatorMotor.set(0);
         rightElevatorMotor.set(0);
       }
+
+      // switch(elevatorState) {
+      //   case TOP:
+      //     moveToTop();
+      //     break;
+      //   case MIDDLE:
+      //     moveToMiddle();
+      //     break;
+      //   case BOTTOM:
+      //     moveToBottom();
+      //   case STAY:
+      //     break;
+      // }
     }
     else {
       leftElevatorMotor.set(0);
       rightElevatorMotor.set(0);
     }
 
-    // switch(elevatorState) {
-    //   case TOP:
-    //     moveToTop();
-    //     break;
-    //   case MIDDLE:
-    //     moveToMiddle();
-    //     break;
-    //   case BOTTOM:
-    //     moveToBottom();
-    //   case STAY:
-    //     break;
-    // }
+    if (intakeForwardButton) {
+      intakeMotor.set(-.5);
+    }
+
+    if (intakeButton) {
+      rightDepositorMotor.set(.2);
+      leftDepositorMotor.set(.2);
+    }
+    else if (depositButton) {
+      rightDepositorMotor.set(-1);
+      leftDepositorMotor.set(-1);
+    }
+    else if (intakeReverseButton) {
+      intakeMotor.set(.5);
+    }
+    else {
+      intakeMotor.set(0);
+      rightDepositorMotor.set(0);
+      leftDepositorMotor.set(0);
+    }
+
 
     
     // if (pulleyButton){
@@ -420,17 +460,17 @@ public class Robot extends TimedRobot {
     }
     */
     double x,y,r,speedReduce;
-    speedReduce = 1;
+    speedReduce = .25;
 
     if(speedReduceButton){
-      speedReduce = 0.25;
+      speedReduce = 1;
     }
     x = -(Math.abs(xAxis)*xAxis) * speedReduce;
     y= Math.abs(yAxis)*yAxis * speedReduce;
     r= Math.abs(rAxis)*rAxis * speedReduce;
 
 
-    swerveDrive.drive(x, y, r, false);
+    swerveDrive.drive(x, y, r, true);
   }
 
   // public void bottomLimitToMiddleLimit (double speed) {
@@ -522,6 +562,8 @@ public class Robot extends TimedRobot {
       rightElevatorMotor.set(elevSpeed);
     }
     else {
+      leftElevatorMotor.set(0);
+      rightElevatorMotor.set(0);
       elevatorState = ElevatorStates.STAY;
     }
   }
@@ -532,6 +574,8 @@ public class Robot extends TimedRobot {
       rightElevatorMotor.set(-elevSpeed);
     }
     else {
+      leftElevatorMotor.set(0);
+      rightElevatorMotor.set(0);
       elevatorState = ElevatorStates.STAY;
     }
   }
@@ -542,6 +586,8 @@ public class Robot extends TimedRobot {
       rightElevatorMotor.set(elevSpeed);
     }
     else {
+      leftElevatorMotor.set(0);
+      rightElevatorMotor.set(0);
       elevatorState = ElevatorStates.STAY;
     }
   }

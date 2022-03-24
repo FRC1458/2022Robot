@@ -58,7 +58,7 @@ public class RobotConstants {
     // public final static int rightElevatorSolenoidReverseID = 0;
 
     public final static int bottomLimitSwitchID = 8;
-    public final static int middleLimitSwitchID = 3;
-    public final static int topLimitSwitchID = 4;
+    public final static int middleLimitSwitchID = 6;
+    public final static int topLimitSwitchID = 7;
 
 }
