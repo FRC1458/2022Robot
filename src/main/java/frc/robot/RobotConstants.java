@@ -61,4 +61,12 @@ public class RobotConstants {
     public final static int middleLimitSwitchID = 6;
     public final static int topLimitSwitchID = 7;
 
+    public final static double elevSpeedUp = .35;
+    public final static double elevSpeedDown = .15;
+    public final static double elevSpeedManual = .15;
+    public final static double regularSpeed = .5;
+    public final static double boostedSpeed = .75;
+
+    public final static boolean fieldOriented = true;
+
 }

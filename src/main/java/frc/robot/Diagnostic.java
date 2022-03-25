@@ -5,6 +5,6 @@ import frc.robot.swervedrive.SwerveDrive;
 
 public class Diagnostic {
     public void angleMotorDiagnostic(SwerveDrive sd) {
-        SmartDashboard.putNumber("", sd.backLeft.angleMotorDiagnostic());
+        SmartDashboard.putNumber(sd.backLeft.wheelName + " encoder and abs encoder difference", sd.backLeft.angleMotorDiagnostic());
     }
 }

@@ -110,5 +110,19 @@ public class XboxControllerWrapper extends Wrapper{
         if (isInitialized) return xbox.getRawButton(button);
         return false;
     }
+
+    public boolean getBackButton() {
+        if (isInitialized) return xbox.getBackButton();
+        return false;
+    }
     
+    public boolean getBackButtonPressed() {
+        if (isInitialized) return xbox.getBackButtonPressed();
+        return false;
+    }
+
+    public boolean getBackButtonReleased() {
+        if (isInitialized) return xbox.getBackButtonReleased();
+        return false;
+    }
 }
