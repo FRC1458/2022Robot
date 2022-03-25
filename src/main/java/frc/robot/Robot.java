@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.Timer;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -30,6 +31,7 @@ import frc.robot.RobotConstants;
 import frc.robot.swervedrive.SwerveDrive;
 import frc.robot.swervedrive.Wheel;
 import frc.robot.wrappers.*;
+
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
@@ -107,6 +109,7 @@ public class Robot extends TimedRobot {
   private boolean pulleyButton;
   private boolean stopElevatorButton;
   private boolean fieldOriented;
+  private boolean intakeOn = false;
 
   private boolean PulleyInUse;
   // private boolean elevatorDepositButton;
@@ -120,6 +123,8 @@ public class Robot extends TimedRobot {
   private boolean intakeButton;
   private boolean intakeReverseButton;
   private boolean intakeForwardButton;
+
+  private boolean oldIntakeButton;
 
   private boolean intakeSolenoidButton;
   private boolean elevSolenoidEngageButton;
@@ -167,11 +172,16 @@ public class Robot extends TimedRobot {
   private DigitalInput middleLimitSwitch;
   private DigitalInput topLimitSwitch;
 
-  private int AUTO_totalCount = 0;
-  private int AUTO_depositCount = 0;
-  private int AUTO_taxiCount = 0;
+  private boolean middleBool = false;
+
+  private Timer middleTimer;
+
+  private Timer AUTO_totalTimer;
+  private Timer AUTO_depositTimer;
+  private Timer AUTO_taxiTimer;
 
   private boolean AUTO_taxi = false;
+  private boolean AUTO_depositorDone = false;
 
 
 
@@ -218,6 +228,11 @@ public class Robot extends TimedRobot {
     boostedSpeed = RobotConstants.boostedSpeed;
 
     fieldOriented = RobotConstants.fieldOriented;
+
+    middleTimer = new Timer();
+    AUTO_taxiTimer = new Timer();
+    AUTO_totalTimer = new Timer();
+    AUTO_depositTimer = new Timer();
   }
 
 
@@ -225,8 +240,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     //set to defaults
     compressor.enableDigital();
-    autonomousInit();
-    swerveDrive.setEncoders();
+    
     intakeSolenoid.set(false);
 
     elevatorState = ElevatorStates.STOP;
@@ -237,7 +251,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     // ballCamera = new CameraWrapper(true);
-    
+    swerveDrive.setEncoders();
+    swerveDrive.resetNavX();
   }
 
 
@@ -298,14 +313,14 @@ public class Robot extends TimedRobot {
       //climbButton = xboxController.getXButton();
       //elevatorClimbButton = xboxController.getYButton();
       intakeButton = xboxController.getRightBumper() && !xboxController.getLeftBumper() && !elevTop;
-      // intakeReverseButton = (xboxController.getPOV() == 90);
+      intakeReverseButton = (xboxController.getRightTriggerAxis() > 0.7);
       intakeForwardButton = (xboxController.getLeftTriggerAxis() > 0.7) && !xboxController.getRightBumper();
       
       depositButton = xboxController.getLeftBumper() && !xboxController.getRightBumper() && !elevTop;
 
       // dropBall = xboxController.getRightBumper();
       resetNavX = xboxController.getStartButton();
-      speedIncreaseButton = xboxController.getRightTriggerAxis() > 0.7;
+      //speedIncreaseButton = xboxController.getRightTriggerAxis() > 0.7;
 
       elevTop = (xboxController.getPOV() == 0) && xboxController.getStartButton() && xboxController.getLeftBumper();
       elevMiddle = (xboxController.getPOV() == 0);
@@ -439,11 +454,19 @@ public class Robot extends TimedRobot {
       rightElevatorMotor.set(0);
     }
 
+    
+
+    if (intakeButton != oldIntakeButton && intakeButton == true) {
+      intakeOn = !intakeOn;
+    }
+
+    oldIntakeButton = intakeButton;
+
     if (intakeForwardButton) {
       intakeMotor.set(.5);
     }
 
-    else if (intakeButton) {
+    else if (intakeOn) {
       rightDepositorMotor.set(.2);
       leftDepositorMotor.set(.2);
       intakeMotor.set(.5);
@@ -452,9 +475,9 @@ public class Robot extends TimedRobot {
       rightDepositorMotor.set(-1);
       leftDepositorMotor.set(-1);
     }
-    // else if (intakeReverseButton) {
-    //   intakeMotor.set(.5);
-    // }
+    else if (intakeReverseButton) {
+      intakeMotor.set(-.5);
+    }
     else {
       intakeMotor.set(0);
       rightDepositorMotor.set(0);
@@ -494,9 +517,9 @@ public class Robot extends TimedRobot {
     double x,y,r,speedIncrease;
     speedIncrease = regularSpeed;
 
-    if(speedIncreaseButton){
-      speedIncrease = boostedSpeed;
-    }
+    // if(speedIncreaseButton){
+    //   speedIncrease = boostedSpeed;
+    // }
     x = -(Math.abs(xAxis)*xAxis) * speedIncrease;
     y= Math.abs(yAxis)*yAxis * speedIncrease;
     r= Math.abs(rAxis)*rAxis * speedIncrease;
@@ -534,41 +557,62 @@ public class Robot extends TimedRobot {
   //   }
   // }
 
-  // @Override
-  // public void autonomousInit() {
-  //   elevatorSolenoid.set(false);
-  //   engagedElevator = false;
-  //   elevatorState = ElevatorStates.MIDDLE;
-  // }
+  @Override
+  public void autonomousInit() {
+    elevatorSolenoid.set(true);
+    engagedElevator = true;
+    elevatorState = ElevatorStates.STOP;
+    swerveDrive.setEncoders();
+    swerveDrive.resetNavX();
+  }
 
-  // @Override
-  // public void autonomousPeriodic() {
-  //   AUTO_totalCount++;
+  @Override
+  public void autonomousPeriodic() {
+    AUTO_totalTimer.start();
 
-  //   if (elevatorState == ElevatorStates.STOP && AUTO_depositCount == 0) {
-  //     depositButton = true;
-  //   }
+    switch(elevatorState) {
+      case TOP:
+        moveToTop();
+        break;
+      case MIDDLE:
+        moveToMiddle();
+        break;
+      case BOTTOM:
+        moveToBottom();
+        break;
+      case STOP:
+        stopElevator();
+      case MANUAL:
+        break;
+    }
 
-  //   if (depositButton) {
-  //     AUTO_depositCount++;
-  //   }
+    if (AUTO_depositTimer.get() < 1) {
+      AUTO_depositTimer.start();
+      rightDepositorMotor.set(-1);
+      leftDepositorMotor.set(-1);
+    }
 
-  //   if (AUTO_depositCount == 100) {
-  //     depositButton = false;
-  //     elevatorState = ElevatorStates.BOTTOM;
-  //     AUTO_taxi = true;
-  //   }
+    if (AUTO_depositTimer.get() >= 1 && AUTO_depositorDone == false) {
+      rightDepositorMotor.set(0);
+      leftDepositorMotor.set(0);
+      elevatorState = ElevatorStates.BOTTOM;
+      AUTO_depositTimer.stop();
+      AUTO_taxi = true;
+      AUTO_taxiTimer.start();
+      AUTO_depositorDone = true;
+      
+    }
 
-  //   if (AUTO_taxi && elevatorState == ElevatorStates.STOP && AUTO_depositCount <= 100) {
-  //     swerveDrive.drive(0, -0.2, 0, true);
-  //     AUTO_taxiCount++;
-  //   }
+    if (AUTO_taxi && AUTO_taxiTimer.get() < 2) {
+      swerveDrive.drive(0, 0.3, 0, false);
+    }
 
-  //   if (AUTO_taxiCount == 100) {
-  //     swerveDrive.drive(0, 0, 0, true);
-  //     AUTO_taxi = false;
-  //   }
-  // }
+    if (AUTO_taxiTimer.get() >= 2) {
+      swerveDrive.drive(0, 0, 0, false);
+      AUTO_taxi = false;
+      AUTO_taxiTimer.stop();
+    }
+  }
   
 
   // @Override
@@ -581,21 +625,21 @@ public class Robot extends TimedRobot {
   //   ballCamera.endCamera();
   // }
 
-  // public void moveElevator(int input) {
-  //   if (input == 1) {
-  //     leftElevatorMotor.set(.2);
-  //     rightElevatorMotor.set(-.2);
-  //     elevatorSpeed = 1;
-  //   } else if (input == -1) {
-  //     leftElevatorMotor.set(-.2);
-  //     rightElevatorMotor.set(.2);
-  //     elevatorSpeed = -1;
-  //   } else if (input == 0) {
-  //     leftElevatorMotor.set(0);
-  //     rightElevatorMotor.set(0);
-  //     elevatorSpeed = 0;
-  //   }
-  // }
+  public void moveElevator(int input) {
+    if (input == 1) {
+      leftElevatorMotor.set(.2);
+      rightElevatorMotor.set(-.2);
+      elevatorSpeed = 1;
+    } else if (input == -1) {
+      leftElevatorMotor.set(-.2);
+      rightElevatorMotor.set(.2);
+      elevatorSpeed = -1;
+    } else if (input == 0) {
+      leftElevatorMotor.set(0);
+      rightElevatorMotor.set(0);
+      elevatorSpeed = 0;
+    }
+  }
 
   public void moveToTop() {
     if (topLimitSwitch.get()) {
@@ -618,12 +662,27 @@ public class Robot extends TimedRobot {
   }
 
   public void moveToMiddle() {
-    if (middleLimitSwitch.get() && topLimitSwitch.get()) {
+    if (middleLimitSwitch.get() && !middleBool && topLimitSwitch.get()) {
+      leftElevatorMotor.set(-elevSpeedUp);
+      rightElevatorMotor.set(elevSpeedUp);
+      middleTimer.reset();
+      middleTimer.stop();
+    }
+    else if (!middleLimitSwitch.get() && !middleBool) {
+      middleBool = true;
+      leftElevatorMotor.set(-elevSpeedUp);
+      rightElevatorMotor.set(elevSpeedUp);
+      middleTimer.start();
+    }
+    else if (middleBool && middleTimer.get() < 0.15) {
       leftElevatorMotor.set(-elevSpeedUp);
       rightElevatorMotor.set(elevSpeedUp);
     }
     else {
       elevatorState = ElevatorStates.STOP;
+      middleTimer.stop();
+      middleTimer.reset();
+      middleBool = false;
     }
   }
 
