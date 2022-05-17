@@ -63,10 +63,14 @@ public class RobotConstants {
 
     public final static double elevSpeedUp = .35;
     public final static double elevSpeedDown = .2;
-    public final static double elevSpeedManual = .15;
-    public final static double regularSpeed = .75;
+    public final static double elevSpeedManualUp = .1;
+    public final static double elevSpeedManualDown = .1;
+    public final static double regularSpeed = 1;
     public final static double boostedSpeed = .75;
 
     public final static boolean fieldOriented = true;
 
+    public final static double elevatorMiddleBonusSeconds = 0.05;
+
 }
+

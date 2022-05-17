@@ -223,7 +223,7 @@ public class Robot extends TimedRobot {
 
     elevSpeedUp = RobotConstants.elevSpeedUp;
     elevSpeedDown = RobotConstants.elevSpeedDown;
-    elevSpeedManual = RobotConstants.elevSpeedManual;
+    elevSpeedManual = RobotConstants.elevSpeedManualUp;
     regularSpeed = RobotConstants.regularSpeed;
     boostedSpeed = RobotConstants.boostedSpeed;
 
@@ -336,6 +336,10 @@ public class Robot extends TimedRobot {
 
       elevatorManualUp = xboxController.getPOV() == 90;
       elevatorManualDown = xboxController.getPOV() == 270;
+
+      if (depositButton && intakeOn) {
+        intakeOn = false;
+      }
     }
     else if (controllerType == 1) {
       xAxis = leftStick.getRawAxis(0);
@@ -421,9 +425,10 @@ public class Robot extends TimedRobot {
         elevatorState = ElevatorStates.MANUAL;
       }
       else if (elevatorManualDown) {
-        leftElevatorMotor.set(elevSpeedManual);
-        rightElevatorMotor.set(-elevSpeedManual);
+        leftElevatorMotor.set(RobotConstants.elevSpeedManualDown);
+        rightElevatorMotor.set(-RobotConstants.elevSpeedManualDown);
         elevatorState = ElevatorStates.MANUAL;
+        System.out.print("down");
       }
       else if (elevatorState == ElevatorStates.MANUAL) {
         elevatorState = ElevatorStates.STOP;
@@ -564,6 +569,7 @@ public class Robot extends TimedRobot {
     elevatorState = ElevatorStates.STOP;
     swerveDrive.setEncoders();
     swerveDrive.resetNavX();
+    intakeSolenoid.set(true);                                                                                                                                                  ;
   }
 
   @Override
@@ -588,14 +594,14 @@ public class Robot extends TimedRobot {
 
     if (AUTO_depositTimer.get() < 1) {
       AUTO_depositTimer.start();
-      rightDepositorMotor.set(-1);
-      leftDepositorMotor.set(-1);
+      // rightDepositorMotor.set(-1);
+      // leftDepositorMotor.set(-1);
     }
 
     if (AUTO_depositTimer.get() >= 1 && AUTO_depositorDone == false) {
       rightDepositorMotor.set(0);
       leftDepositorMotor.set(0);
-      elevatorState = ElevatorStates.BOTTOM;
+      //elevatorState = ElevatorStates.BOTTOM;
       AUTO_depositTimer.stop();
       AUTO_taxi = true;
       AUTO_taxiTimer.start();
@@ -674,7 +680,7 @@ public class Robot extends TimedRobot {
       rightElevatorMotor.set(elevSpeedUp);
       middleTimer.start();
     }
-    else if (middleBool && middleTimer.get() < 0.15) {
+    else if (middleBool && middleTimer.get() < RobotConstants.elevatorMiddleBonusSeconds) { 
       leftElevatorMotor.set(-elevSpeedUp);
       rightElevatorMotor.set(elevSpeedUp);
     }
